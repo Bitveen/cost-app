@@ -3,8 +3,10 @@ import { combineReducers } from "redux";
 
 
 
-
-const listsReducer = (state = [], action) => {
+/*
+* Для управления добавлением новых элементов списка
+* */
+export const listsReducer = (state = [], action) => {
     switch(action.type) {
         case ActionTypes.CREATE_LIST:
             return [
@@ -25,7 +27,7 @@ const listsReducer = (state = [], action) => {
 /*
 * Для управления скрытием и показом формы добавления нового списка
 * */
-const listFormVisibilityReducer = (state = false, action) => {
+export const listFormVisibilityReducer = (state = false, action) => {
     switch (action.type) {
         case ActionTypes.TOGGLE_CREATE_LIST_FORM:
             return !state;

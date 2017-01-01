@@ -24935,6 +24935,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.listFormVisibilityReducer = exports.listsReducer = undefined;
 
 	var _ActionTypes = __webpack_require__(230);
 
@@ -24946,7 +24947,10 @@
 
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-	var listsReducer = function listsReducer() {
+	/*
+	* Для управления добавлением новых элементов списка
+	* */
+	var listsReducer = exports.listsReducer = function listsReducer() {
 	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 	    var action = arguments[1];
 
@@ -24965,7 +24969,7 @@
 	/*
 	* Для управления скрытием и показом формы добавления нового списка
 	* */
-	var listFormVisibilityReducer = function listFormVisibilityReducer() {
+	var listFormVisibilityReducer = exports.listFormVisibilityReducer = function listFormVisibilityReducer() {
 	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 	    var action = arguments[1];
 
