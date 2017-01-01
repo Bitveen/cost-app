@@ -12,7 +12,11 @@ module.exports = {
             Content: "components/Content.jsx",
             TopBar: "components/TopBar.jsx",
             ListEditForm: "components/ListEditForm.jsx",
-            UserList: "components/UserList.jsx"
+            UserList: "components/UserList.jsx",
+            reducers: "reducers/reducers.jsx",
+            ActionTypes: "constants/ActionTypes.jsx",
+            store: "store/configureStore.jsx",
+            actions: "actions/actions.jsx"
         },
         extensions: ["", ".js", ".jsx"]
     },

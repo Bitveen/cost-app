@@ -19,7 +19,7 @@ export default class Content extends Component {
                     <div className="ui piled segment">
                         <h4 className="ui header">Список за декабрь 2016 года</h4>
                         <ListEditForm />
-                        <h4 className="ui horizontal divider header"><i className="users icon"></i> Пользователи </h4>
+                        <h4 className="ui horizontal divider header"><i className="users icon" /> Пользователи </h4>
                         <UserList />
                     </div>
                 </div>

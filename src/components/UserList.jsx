@@ -24,7 +24,7 @@ export default class UserList extends Component {
                     <tr>
                         <th>
                             <div className="ui small primary labeled icon button">
-                                <i className="user icon"></i>
+                                <i className="user icon" />
                                     Добавить пользователя
                             </div>
                         </th>
