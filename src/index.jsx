@@ -1,16 +1,19 @@
 import React from "react";
 import { render } from "react-dom";
-import App from "App";
+import { createStore } from "redux";
 import { Provider } from "react-redux";
-import { configure } from "store";
+
+import App from "App";
+import appReducer from "reducers";
 
 
-const store = configure();
+const store = createStore(appReducer);
 
 
 store.subscribe(() => {
     console.log(store.getState());
 });
+
 
 require("style!css!sass!style/app.scss");
 

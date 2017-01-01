@@ -1,17 +1,16 @@
-import {
-    TOGGLE_CREATE_LIST_FORM,
-    HIDE_CREATE_LIST_FORM,
-    CREATE_LIST
-} from "ActionTypes";
+import * as ActionTypes from "ActionTypes";
+import { combineReducers } from "redux";
 
 
-export const listReducer = (state = [], action) => {
-    switch (action.type) {
-        case CREATE_LIST:
+
+
+const listsReducer = (state = [], action) => {
+    switch(action.type) {
+        case ActionTypes.CREATE_LIST:
             return [
                 ...state,
                 {
-                    id: state.length + 1,
+                    id: action.list.id,
                     title: action.list.title
                 }
             ];
@@ -21,14 +20,30 @@ export const listReducer = (state = [], action) => {
     }
 };
 
-export const createListReducer = (state = false, action) => {
+
+
+/*
+* Для управления скрытием и показом формы добавления нового списка
+* */
+const listFormVisibilityReducer = (state = false, action) => {
     switch (action.type) {
-        case TOGGLE_CREATE_LIST_FORM:
+        case ActionTypes.TOGGLE_CREATE_LIST_FORM:
             return !state;
             break;
-        case HIDE_CREATE_LIST_FORM:
-            return false
         default:
             return state;
     }
 };
+
+
+const appReducer = combineReducers({
+    lists: listsReducer,
+    listFormVisible: listFormVisibilityReducer
+});
+
+
+
+
+
+
+export default appReducer;

@@ -8,7 +8,7 @@ module.exports = {
         root: __dirname + "/src",
         alias: {
             App: "components/App.jsx",
-            Menu: "components/Menu.jsx",
+            Menu: "containers/Menu.jsx",
             Content: "components/Content.jsx",
             TopBar: "components/TopBar.jsx",
             ListEditForm: "components/ListEditForm.jsx",
@@ -16,7 +16,9 @@ module.exports = {
             reducers: "reducers/reducers.jsx",
             ActionTypes: "constants/ActionTypes.jsx",
             store: "store/configureStore.jsx",
-            actions: "actions/actions.jsx"
+            actions: "actions/actions.jsx",
+            AddList: "containers/AddList.jsx",
+            MenuList: "components/MenuList.jsx"
         },
         extensions: ["", ".js", ".jsx"]
     },

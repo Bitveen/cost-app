@@ -1,25 +1,15 @@
-import {
-    HIDE_CREATE_LIST_FORM,
-    CREATE_LIST,
-    TOGGLE_CREATE_LIST_FORM
-} from "ActionTypes";
+import * as ActionTypes from "ActionTypes";
 
 
-export const createList = (listData) => {
+export const createList = (list) => {
     return {
-        type: CREATE_LIST,
-        list: listData
-    };
-};
-
-export const hideCreateListForm = () => {
-    return {
-        type: HIDE_CREATE_LIST_FORM
+        type: ActionTypes.CREATE_LIST,
+        list
     };
 };
 
 export const toggleCreateListForm = () => {
     return {
-        type: TOGGLE_CREATE_LIST_FORM
+        type: ActionTypes.TOGGLE_CREATE_LIST_FORM
     };
 };
