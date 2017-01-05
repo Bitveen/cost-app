@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import AddList from "AddList";
 import MenuList from "MenuList";
 
-class Menu extends Component {
+export class Menu extends Component {
     constructor(props) {
         super(props);
     }
@@ -18,6 +18,7 @@ class Menu extends Component {
         );
     }
 }
+
 
 export default connect((state) => {
     return {

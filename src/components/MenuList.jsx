@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from "react";
-
+import { Link } from "react-router";
 
 export default class MenuList extends Component {
     constructor(props) {
@@ -22,7 +22,7 @@ export default class MenuList extends Component {
            </div>);
         } else {
             nodes = lists.map((item) => {
-                return <a key={item.id} className="item">{item.title}</a>;
+                return <Link key={item.id} to={`/list/${item.id}`} activeClassName="active" className="item">{item.title}</Link>;
             });
         }
 

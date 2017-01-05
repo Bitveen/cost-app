@@ -18,7 +18,8 @@ module.exports = {
             store: "store/configureStore.jsx",
             actions: "actions/actions.jsx",
             AddList: "containers/AddList.jsx",
-            MenuList: "components/MenuList.jsx"
+            MenuList: "components/MenuList.jsx",
+            Empty: "components/Empty.jsx"
         },
         extensions: ["", ".js", ".jsx"]
     },

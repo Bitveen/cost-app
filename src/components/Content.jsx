@@ -11,13 +11,19 @@ export default class Content extends Component {
         super(props);
     }
 
+    componentDidMount() {
+        // забрать всю инфу из store
+    }
+
     render() {
+        //console.log(this.props.params.listId);
+
         return (
             <div className="content-container">
                 <TopBar />
                 <div className="content">
                     <div className="ui piled segment">
-                        <h4 className="ui header">Список за декабрь 2016 года</h4>
+                        <h4 className="ui header" />
                         <ListEditForm />
                         <h4 className="ui horizontal divider header"><i className="users icon" /> Пользователи </h4>
                         <UserList />
@@ -27,3 +33,4 @@ export default class Content extends Component {
         );
     }
 }
+

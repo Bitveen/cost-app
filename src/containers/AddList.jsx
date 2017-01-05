@@ -3,7 +3,7 @@ import { toggleCreateListForm, createList } from "actions";
 import uuid from "uuid";
 import { connect } from "react-redux";
 
-class AddList extends Component {
+export class AddList extends Component {
 
     constructor(props) {
         super(props);
@@ -60,7 +60,7 @@ class AddList extends Component {
     render() {
         let { listFormVisible } = this.props;
         return (
-            <div>
+            <div className="addList">
                 <div className="item">
                     <button onClick={this.handleNewListClick} className={ listFormVisible ? "ui basic button active fluid" : "ui basic button fluid"}><i className="icon write" /> Новый список </button>
                 </div>

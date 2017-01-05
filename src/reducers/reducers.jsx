@@ -1,6 +1,4 @@
 import * as ActionTypes from "ActionTypes";
-import { combineReducers } from "redux";
-
 
 
 /*
@@ -36,16 +34,3 @@ export const listFormVisibilityReducer = (state = false, action) => {
             return state;
     }
 };
-
-
-const appReducer = combineReducers({
-    lists: listsReducer,
-    listFormVisible: listFormVisibilityReducer
-});
-
-
-
-
-
-
-export default appReducer;
