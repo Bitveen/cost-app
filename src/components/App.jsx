@@ -1,19 +1,15 @@
-import React, { Component } from "react";
-import Menu from "Menu";
-import Content from "Content";
+import React from "react";
+import Sidebar from "Sidebar";
 
-export default class App extends Component {
-    constructor(props) {
-        super(props);
-    }
+const App = ({ children }) => {
 
+    return (
+        <div>
+            <Sidebar />
+            {children}
+        </div>
+    );
 
-    render() {
-        return (
-            <div>
-                <Menu />
-                {this.props.children}
-            </div>
-        );
-    }
-}
+};
+
+export default App;
