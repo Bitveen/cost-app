@@ -44,25 +44,29 @@ class ListView extends React.Component {
 
     render() {
         let {totalCost, title, id} = this.props.list;
-        let {users} = this.props;
+        let {users, children} = this.props;
         return (
-            <div className="content-container">
-                <TopBar totalCost={totalCost} />
-                <div className="content">
-                    <div className="ui stacked segment">
-                        <h4>Название списка: {title}</h4>
-                        <div className="ui form">
-                            <div className="inline fields">
-                                <div className="five wide field">
-                                    <label>Бюджет</label>
-                                    <input type="text" placeholder="Бюджет..." defaultValue={totalCost} onChange={this.handleTotalCostChange}/>
+            <div>
+                {children}
+                <div className="content-container">
+                    <TopBar totalCost={totalCost} />
+                    <div className="content">
+                        <div className="ui stacked segment">
+                            <h4>Название списка: {title}</h4>
+                            <div className="ui form">
+                                <div className="inline fields">
+                                    <div className="five wide field">
+                                        <label>Бюджет</label>
+                                        <input type="text" placeholder="Бюджет..." defaultValue={totalCost} onChange={this.handleTotalCostChange}/>
+                                    </div>
                                 </div>
                             </div>
+                            <UsersList users={users} listId={id} />
                         </div>
-                        <UsersList users={users} listId={id} />
                     </div>
                 </div>
             </div>
+
         );
     }
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 
 
+
 const UsersList = ({ listId, users }) => {
 
     return (
@@ -18,7 +19,7 @@ const UsersList = ({ listId, users }) => {
             <tbody>
                 {users.map((user, i) => {
                     return (
-                        <tr>
+                        <tr key={i}>
                             <td>{user.lastName}</td>
                             <td>{user.firstName}</td>
                             <td>{user.middleName}</td>

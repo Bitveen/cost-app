@@ -1,3 +1,6 @@
+const webpack = require('webpack');
+
+
 module.exports = {
     entry: __dirname + '/src/index.jsx',
     output: {
@@ -14,10 +17,17 @@ module.exports = {
             Index: 'components/Index.jsx',
             ListView: 'components/ListView.jsx',
             TopBar: 'components/TopBar.jsx',
-            UsersList: 'components/UsersList.jsx'
+            UsersList: 'components/UsersList.jsx',
+            Modal: 'components/Modal.jsx',
+            EditModal: 'components/EditModal.jsx'
         },
         extensions: ['', '.js', '.jsx']
     },
+    plugins: [
+        new webpack.ProvidePlugin({
+            $: "jquery/dist/jquery.min.js"
+        })
+    ],
     module: {
         loaders: [
             {

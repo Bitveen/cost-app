@@ -78,11 +78,15 @@
 
 	var _ListView2 = _interopRequireDefault(_ListView);
 
+	var _EditModal = __webpack_require__(282);
+
+	var _EditModal2 = _interopRequireDefault(_EditModal);
+
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(282);
+	__webpack_require__(284);
 
 	var store = (0, _redux.createStore)((0, _redux.combineReducers)({
 	    usersLists: reducers.usersLists,
@@ -100,7 +104,11 @@
 	var routes = _react2.default.createElement(
 	    _reactRouter.Route,
 	    { path: '/', component: _App2.default },
-	    _react2.default.createElement(_reactRouter.Route, { path: '/list/:listId', component: _ListView2.default }),
+	    _react2.default.createElement(
+	        _reactRouter.Route,
+	        { path: '/list/:listId', component: _ListView2.default },
+	        _react2.default.createElement(_reactRouter.Route, { path: '/list/:listId/user/:userId/edit', component: _EditModal2.default })
+	    ),
 	    _react2.default.createElement(_reactRouter.IndexRoute, { component: _Index2.default })
 	);
 
@@ -29359,43 +29367,50 @@
 	                totalCost = _props$list.totalCost,
 	                title = _props$list.title,
 	                id = _props$list.id;
-	            var users = this.props.users;
+	            var _props = this.props,
+	                users = _props.users,
+	                children = _props.children;
 
 	            return _react2.default.createElement(
 	                'div',
-	                { className: 'content-container' },
-	                _react2.default.createElement(_TopBar2.default, { totalCost: totalCost }),
+	                null,
+	                children,
 	                _react2.default.createElement(
 	                    'div',
-	                    { className: 'content' },
+	                    { className: 'content-container' },
+	                    _react2.default.createElement(_TopBar2.default, { totalCost: totalCost }),
 	                    _react2.default.createElement(
 	                        'div',
-	                        { className: 'ui stacked segment' },
-	                        _react2.default.createElement(
-	                            'h4',
-	                            null,
-	                            '\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u0441\u043F\u0438\u0441\u043A\u0430: ',
-	                            title
-	                        ),
+	                        { className: 'content' },
 	                        _react2.default.createElement(
 	                            'div',
-	                            { className: 'ui form' },
+	                            { className: 'ui stacked segment' },
+	                            _react2.default.createElement(
+	                                'h4',
+	                                null,
+	                                '\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u0441\u043F\u0438\u0441\u043A\u0430: ',
+	                                title
+	                            ),
 	                            _react2.default.createElement(
 	                                'div',
-	                                { className: 'inline fields' },
+	                                { className: 'ui form' },
 	                                _react2.default.createElement(
 	                                    'div',
-	                                    { className: 'five wide field' },
+	                                    { className: 'inline fields' },
 	                                    _react2.default.createElement(
-	                                        'label',
-	                                        null,
-	                                        '\u0411\u044E\u0434\u0436\u0435\u0442'
-	                                    ),
-	                                    _react2.default.createElement('input', { type: 'text', placeholder: '\u0411\u044E\u0434\u0436\u0435\u0442...', defaultValue: totalCost, onChange: this.handleTotalCostChange })
+	                                        'div',
+	                                        { className: 'five wide field' },
+	                                        _react2.default.createElement(
+	                                            'label',
+	                                            null,
+	                                            '\u0411\u044E\u0434\u0436\u0435\u0442'
+	                                        ),
+	                                        _react2.default.createElement('input', { type: 'text', placeholder: '\u0411\u044E\u0434\u0436\u0435\u0442...', defaultValue: totalCost, onChange: this.handleTotalCostChange })
+	                                    )
 	                                )
-	                            )
-	                        ),
-	                        _react2.default.createElement(_UsersList2.default, { users: users, listId: id })
+	                            ),
+	                            _react2.default.createElement(_UsersList2.default, { users: users, listId: id })
+	                        )
 	                    )
 	                )
 	            );
@@ -29505,7 +29520,7 @@
 	            users.map(function (user, i) {
 	                return _react2.default.createElement(
 	                    'tr',
-	                    null,
+	                    { key: i },
 	                    _react2.default.createElement(
 	                        'td',
 	                        null,
@@ -29548,13 +29563,86 @@
 /* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Modal = __webpack_require__(283);
+
+	var _Modal2 = _interopRequireDefault(_Modal);
+
+	var _reactRedux = __webpack_require__(199);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {};
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(_Modal2.default);
+
+/***/ },
+/* 283 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Modal = function Modal() {
+	    return _react2.default.createElement(
+	        "div",
+	        null,
+	        _react2.default.createElement(
+	            "div",
+	            { className: "my-modal" },
+	            _react2.default.createElement(
+	                "h4",
+	                null,
+	                "Modal"
+	            ),
+	            _react2.default.createElement(
+	                "p",
+	                null,
+	                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo officia est voluptatum consequatur adipisci sint. Ea placeat eius, natus aliquid doloribus, deserunt rerum facilis nemo, quo quam, porro sunt ab."
+	            ),
+	            _react2.default.createElement(
+	                "button",
+	                { className: "ui button" },
+	                "\u0417\u0430\u043A\u0440\u044B\u0442\u044C"
+	            )
+	        ),
+	        _react2.default.createElement("div", { className: "my-modal-overlay" })
+	    );
+	};
+
+	exports.default = Modal;
+
+/***/ },
+/* 284 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(283);
+	var content = __webpack_require__(285);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(285)(content, {});
+	var update = __webpack_require__(287)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -29571,21 +29659,21 @@
 	}
 
 /***/ },
-/* 283 */
+/* 285 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(284)();
+	exports = module.exports = __webpack_require__(286)();
 	// imports
 
 
 	// module
-	exports.push([module.id, ".content-container {\n  padding-left: 252px;\n  position: relative; }\n\n.content {\n  padding: 100px 15px 0 15px; }\n\n.list-control-menu {\n  z-index: 2000 !important;\n  overflow: auto; }\n\n.top-bar-menu {\n  padding-left: 252px; }\n\n.empty-list {\n  padding-top: 100px; }\n\n.centered {\n  text-align: center; }\n", ""]);
+	exports.push([module.id, ".content-container {\n  padding-left: 252px;\n  position: relative; }\n\n.content {\n  padding: 100px 15px 0 15px; }\n\n.list-control-menu {\n  z-index: 2000 !important;\n  overflow: auto; }\n\n.top-bar-menu {\n  padding-left: 252px; }\n\n.empty-list {\n  padding-top: 100px; }\n\n.centered {\n  text-align: center; }\n\n.my-modal {\n  position: fixed;\n  display: block;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  width: 600px;\n  max-width: 100%;\n  height: 400px;\n  max-height: 100%;\n  z-index: 4000;\n  background-color: #fff;\n  border: 1px solid #f6f6f6;\n  padding: 15px;\n  box-sizing: border-box; }\n\n.my-modal-overlay {\n  display: block;\n  z-index: 3000;\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background-color: rgba(0, 0, 0, 0.25); }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 284 */
+/* 286 */
 /***/ function(module, exports) {
 
 	/*
@@ -29641,7 +29729,7 @@
 
 
 /***/ },
-/* 285 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*

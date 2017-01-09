@@ -10,6 +10,8 @@ import * as reducers from 'reducers';
 import App from 'App';
 import Index from 'Index';
 import ListView from 'ListView';
+import EditModal from 'EditModal';
+
 
 require('style!css!sass!style/app.scss');
 
@@ -32,7 +34,9 @@ store.subscribe(() => {
 
 const routes = (
     <Route path='/' component={App}>
-        <Route path='/list/:listId' component={ListView} />
+        <Route path='/list/:listId' component={ListView}>
+            <Route path='/list/:listId/user/:userId/edit' component={EditModal} />
+        </Route>
         <IndexRoute component={Index} />
     </Route>
 );
