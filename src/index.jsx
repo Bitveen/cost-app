@@ -27,11 +27,10 @@ const history = syncHistoryWithStore(browserHistory, store);
 
 const routes = (
     <Route path='/' component={App}>
+        <Route path='/list/:listId' component={ListView} />
         <IndexRoute component={Index} />
-        <Route path='/list/:listId' component={ListView}/>
     </Route>
 );
-
 
 
 ReactDOM.render(

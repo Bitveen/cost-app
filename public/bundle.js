@@ -74,7 +74,7 @@
 
 	var _Index2 = _interopRequireDefault(_Index);
 
-	var _ListView = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"ListView\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var _ListView = __webpack_require__(279);
 
 	var _ListView2 = _interopRequireDefault(_ListView);
 
@@ -82,7 +82,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(279);
+	__webpack_require__(280);
 
 	var store = (0, _redux.createStore)((0, _redux.combineReducers)({
 	    usersLists: reducers.usersLists,
@@ -95,8 +95,8 @@
 	var routes = _react2.default.createElement(
 	    _reactRouter.Route,
 	    { path: '/', component: _App2.default },
-	    _react2.default.createElement(_reactRouter.IndexRoute, { component: _Index2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: '/list/:listId', component: _ListView2.default })
+	    _react2.default.createElement(_reactRouter.Route, { path: '/list/:listId', component: _ListView2.default }),
+	    _react2.default.createElement(_reactRouter.IndexRoute, { component: _Index2.default })
 	);
 
 	_reactDom2.default.render(_react2.default.createElement(
@@ -29208,13 +29208,63 @@
 /* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(199);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var mapStateToProps = function mapStateToProps(state, props) {
+	    var list = state.usersLists.filter(function (list) {
+	        return list.id === parseInt(props.params.listId, 10);
+	    })[0];
+	    return {
+	        list: list
+	    };
+	};
+
+	var ListView = function ListView(props) {
+	    return _react2.default.createElement(
+	        'div',
+	        { className: 'content-container' },
+	        _react2.default.createElement(
+	            'div',
+	            { className: 'content' },
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'ui stacked segment' },
+	                _react2.default.createElement(
+	                    'h1',
+	                    null,
+	                    'List title: ',
+	                    props.list.title
+	                )
+	            )
+	        )
+	    );
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(ListView);
+
+/***/ },
+/* 280 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(280);
+	var content = __webpack_require__(281);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(282)(content, {});
+	var update = __webpack_require__(283)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -29231,10 +29281,10 @@
 	}
 
 /***/ },
-/* 280 */
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(281)();
+	exports = module.exports = __webpack_require__(282)();
 	// imports
 
 
@@ -29245,7 +29295,7 @@
 
 
 /***/ },
-/* 281 */
+/* 282 */
 /***/ function(module, exports) {
 
 	/*
@@ -29301,7 +29351,7 @@
 
 
 /***/ },
-/* 282 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
