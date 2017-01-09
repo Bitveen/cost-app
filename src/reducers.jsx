@@ -37,6 +37,16 @@ export const usersLists = (state = defaultState, action) => {
 };
 
 
+export const users = (state = [], action) => {
+    switch (action.type) {
+        case 'ADD_USER':
+            return state;
+            break;
+        default:
+            return state;
+    }
+};
+
 
 
 

@@ -82,11 +82,12 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(281);
+	__webpack_require__(282);
 
 	var store = (0, _redux.createStore)((0, _redux.combineReducers)({
 	    usersLists: reducers.usersLists,
 	    addingList: reducers.addingList,
+	    users: reducers.users,
 	    routing: _reactRouterRedux.routerReducer
 	}));
 
@@ -28970,6 +28971,19 @@
 	    }
 	};
 
+	var users = exports.users = function users() {
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case 'ADD_USER':
+	            return state;
+	            break;
+	        default:
+	            return state;
+	    }
+	};
+
 	var addingList = exports.addingList = function addingList() {
 	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 	    var action = arguments[1];
@@ -29266,6 +29280,10 @@
 
 	var _TopBar2 = _interopRequireDefault(_TopBar);
 
+	var _UsersList = __webpack_require__(281);
+
+	var _UsersList2 = _interopRequireDefault(_UsersList);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -29280,8 +29298,12 @@
 	    var currentList = state.usersLists.filter(function (list) {
 	        return list.id === parseInt(listId, 10);
 	    })[0];
+	    var users = state.users.filter(function (user) {
+	        return user.listId === parseInt(listId, 10);
+	    });
 	    return {
-	        list: currentList
+	        list: currentList,
+	        users: users
 	    };
 	};
 
@@ -29319,7 +29341,8 @@
 	        value: function render() {
 	            var _props$list = this.props.list,
 	                totalCost = _props$list.totalCost,
-	                title = _props$list.title;
+	                title = _props$list.title,
+	                users = _props$list.users;
 
 	            return _react2.default.createElement(
 	                'div',
@@ -29354,7 +29377,8 @@
 	                                    _react2.default.createElement('input', { type: 'text', placeholder: '\u0411\u044E\u0434\u0436\u0435\u0442...', defaultValue: totalCost, onChange: this.handleTotalCostChange })
 	                                )
 	                            )
-	                        )
+	                        ),
+	                        _react2.default.createElement(_UsersList2.default, { users: users })
 	                    )
 	                )
 	            );
@@ -29403,13 +29427,39 @@
 /* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var UsersList = function UsersList(props) {
+	    return _react2.default.createElement(
+	        'div',
+	        null,
+	        'UsersList'
+	    );
+	};
+
+	exports.default = UsersList;
+
+/***/ },
+/* 282 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(282);
+	var content = __webpack_require__(283);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(284)(content, {});
+	var update = __webpack_require__(285)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -29426,10 +29476,10 @@
 	}
 
 /***/ },
-/* 282 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(283)();
+	exports = module.exports = __webpack_require__(284)();
 	// imports
 
 
@@ -29440,7 +29490,7 @@
 
 
 /***/ },
-/* 283 */
+/* 284 */
 /***/ function(module, exports) {
 
 	/*
@@ -29496,7 +29546,7 @@
 
 
 /***/ },
-/* 284 */
+/* 285 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*

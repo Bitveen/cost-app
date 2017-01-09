@@ -2,13 +2,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { totalCostChange } from 'actions';
 import TopBar from 'TopBar';
-
+import UsersList from 'UsersList';
 
 
 const mapStateToProps = (state, { params: { listId }}) => {
     let currentList = state.usersLists.filter(list => list.id === parseInt(listId, 10))[0];
+    let users = state.users.filter(user => user.listId === parseInt(listId, 10));
     return {
-        list: currentList
+        list: currentList,
+        users
     };
 };
 
@@ -41,7 +43,7 @@ class ListView extends React.Component {
 
 
     render() {
-        let {totalCost, title} = this.props.list;
+        let {totalCost, title, users} = this.props.list;
         return (
             <div className="content-container">
                 <TopBar totalCost={totalCost} />
@@ -56,6 +58,7 @@ class ListView extends React.Component {
                                 </div>
                             </div>
                         </div>
+                        <UsersList users={users} />
                     </div>
                 </div>
             </div>

@@ -18,6 +18,7 @@ require('style!css!sass!style/app.scss');
 const store = createStore(combineReducers({
     usersLists: reducers.usersLists,
     addingList: reducers.addingList,
+    users: reducers.users,
     routing: routerReducer
 }));
 
