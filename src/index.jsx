@@ -9,7 +9,7 @@ import * as reducers from 'reducers';
 
 import App from 'App';
 import Index from 'Index';
-
+import ListView from 'ListView';
 
 require('style!css!sass!style/app.scss');
 
@@ -28,6 +28,7 @@ const history = syncHistoryWithStore(browserHistory, store);
 const routes = (
     <Route path='/' component={App}>
         <IndexRoute component={Index} />
+        <Route path='/list/:listId' component={ListView}/>
     </Route>
 );
 

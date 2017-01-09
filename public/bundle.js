@@ -74,6 +74,10 @@
 
 	var _Index2 = _interopRequireDefault(_Index);
 
+	var _ListView = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"ListView\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+
+	var _ListView2 = _interopRequireDefault(_ListView);
+
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -91,7 +95,8 @@
 	var routes = _react2.default.createElement(
 	    _reactRouter.Route,
 	    { path: '/', component: _App2.default },
-	    _react2.default.createElement(_reactRouter.IndexRoute, { component: _Index2.default })
+	    _react2.default.createElement(_reactRouter.IndexRoute, { component: _Index2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: '/list/:listId', component: _ListView2.default })
 	);
 
 	_reactDom2.default.render(_react2.default.createElement(
