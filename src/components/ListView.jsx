@@ -43,7 +43,8 @@ class ListView extends React.Component {
 
 
     render() {
-        let {totalCost, title, users} = this.props.list;
+        let {totalCost, title, id} = this.props.list;
+        let {users} = this.props;
         return (
             <div className="content-container">
                 <TopBar totalCost={totalCost} />
@@ -58,7 +59,7 @@ class ListView extends React.Component {
                                 </div>
                             </div>
                         </div>
-                        <UsersList users={users} />
+                        <UsersList users={users} listId={id} />
                     </div>
                 </div>
             </div>

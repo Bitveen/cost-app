@@ -1,16 +1,34 @@
 const defaultState = [
     {
         id: 1,
-        title: 'First list',
+        title: 'Премии 2016',
         totalCost: 0
     },
     {
         id: 2,
-        title: 'Second list',
+        title: 'Премии 2015',
         totalCost: 0
     }
 ];
 
+const defaultStateUsers = [
+    {
+        id: 1,
+        firstName: 'Иван',
+        lastName: 'Иванов',
+        middleName: 'Иванович',
+        cost: 0,
+        listId: 1
+    },
+    {
+        id: 2,
+        firstName: 'Петр',
+        lastName: 'Петров',
+        middleName: 'Петрович',
+        cost: 0,
+        listId: 1
+    }
+];
 
 export const usersLists = (state = defaultState, action) => {
     switch(action.type) {
@@ -37,7 +55,7 @@ export const usersLists = (state = defaultState, action) => {
 };
 
 
-export const users = (state = [], action) => {
+export const users = (state = defaultStateUsers, action) => {
     switch (action.type) {
         case 'ADD_USER':
             return state;

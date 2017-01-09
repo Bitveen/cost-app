@@ -28939,12 +28939,28 @@
 
 	var defaultState = [{
 	    id: 1,
-	    title: 'First list',
+	    title: 'Премии 2016',
 	    totalCost: 0
 	}, {
 	    id: 2,
-	    title: 'Second list',
+	    title: 'Премии 2015',
 	    totalCost: 0
+	}];
+
+	var defaultStateUsers = [{
+	    id: 1,
+	    firstName: 'Иван',
+	    lastName: 'Иванов',
+	    middleName: 'Иванович',
+	    cost: 0,
+	    listId: 1
+	}, {
+	    id: 2,
+	    firstName: 'Петр',
+	    lastName: 'Петров',
+	    middleName: 'Петрович',
+	    cost: 0,
+	    listId: 1
 	}];
 
 	var usersLists = exports.usersLists = function usersLists() {
@@ -28972,7 +28988,7 @@
 	};
 
 	var users = exports.users = function users() {
-	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultStateUsers;
 	    var action = arguments[1];
 
 	    switch (action.type) {
@@ -29342,7 +29358,8 @@
 	            var _props$list = this.props.list,
 	                totalCost = _props$list.totalCost,
 	                title = _props$list.title,
-	                users = _props$list.users;
+	                id = _props$list.id;
+	            var users = this.props.users;
 
 	            return _react2.default.createElement(
 	                'div',
@@ -29378,7 +29395,7 @@
 	                                )
 	                            )
 	                        ),
-	                        _react2.default.createElement(_UsersList2.default, { users: users })
+	                        _react2.default.createElement(_UsersList2.default, { users: users, listId: id })
 	                    )
 	                )
 	            );
@@ -29437,13 +29454,91 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRouter = __webpack_require__(216);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var UsersList = function UsersList(props) {
+	var UsersList = function UsersList(_ref) {
+	    var listId = _ref.listId,
+	        users = _ref.users;
+
+
 	    return _react2.default.createElement(
-	        'div',
-	        null,
-	        'UsersList'
+	        'table',
+	        { className: 'ui celled table' },
+	        _react2.default.createElement(
+	            'thead',
+	            null,
+	            _react2.default.createElement(
+	                'tr',
+	                null,
+	                _react2.default.createElement(
+	                    'th',
+	                    null,
+	                    '\u0424\u0430\u043C\u0438\u043B\u0438\u044F'
+	                ),
+	                _react2.default.createElement(
+	                    'th',
+	                    null,
+	                    '\u0418\u043C\u044F'
+	                ),
+	                _react2.default.createElement(
+	                    'th',
+	                    null,
+	                    '\u041E\u0442\u0447\u0435\u0441\u0442\u0432\u043E'
+	                ),
+	                _react2.default.createElement(
+	                    'th',
+	                    null,
+	                    '\u041F\u0440\u0435\u043C\u0438\u044F'
+	                ),
+	                _react2.default.createElement(
+	                    'th',
+	                    null,
+	                    '\u0414\u0435\u0439\u0441\u0442\u0432\u0438\u044F'
+	                )
+	            )
+	        ),
+	        _react2.default.createElement(
+	            'tbody',
+	            null,
+	            users.map(function (user, i) {
+	                return _react2.default.createElement(
+	                    'tr',
+	                    null,
+	                    _react2.default.createElement(
+	                        'td',
+	                        null,
+	                        user.lastName
+	                    ),
+	                    _react2.default.createElement(
+	                        'td',
+	                        null,
+	                        user.firstName
+	                    ),
+	                    _react2.default.createElement(
+	                        'td',
+	                        null,
+	                        user.middleName
+	                    ),
+	                    _react2.default.createElement(
+	                        'td',
+	                        null,
+	                        user.cost,
+	                        ' \u0440\u0443\u0431.'
+	                    ),
+	                    _react2.default.createElement(
+	                        'td',
+	                        { className: 'selectable' },
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/list/' + listId + '/user/' + user.id + '/edit' },
+	                            '\u0420\u0435\u0434\u0430\u043A\u0442\u0438\u0440\u043E\u0432\u0430\u0442\u044C'
+	                        )
+	                    )
+	                );
+	            })
+	        )
 	    );
 	};
 
