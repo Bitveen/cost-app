@@ -16,3 +16,13 @@ export const hideAddList = () => {
         type: 'HIDE_ADD_LIST'
     };
 };
+
+export const totalCostChange = (newCost, listId) => {
+    return {
+        type: 'TOTAL_COST_CHANGE',
+        data: {
+            totalCost: newCost,
+            id: listId
+        }
+    };
+};

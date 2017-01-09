@@ -30,6 +30,13 @@ class Sidebar extends React.Component {
         this.createList = this.createList.bind(this);
     }
 
+    componentDidUpdate() {
+        let listTitleInput = this.refs.listTitle;
+        if (listTitleInput) {
+            this.refs.listTitle.focus();
+        }
+    }
+
 
     createList(e) {
         if (e.which !== 13) {

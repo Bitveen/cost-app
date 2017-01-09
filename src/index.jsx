@@ -24,6 +24,10 @@ const store = createStore(combineReducers({
 const history = syncHistoryWithStore(browserHistory, store);
 
 
+store.subscribe(() => {
+    console.log(store.getState());
+});
+
 
 const routes = (
     <Route path='/' component={App}>
@@ -32,12 +36,16 @@ const routes = (
     </Route>
 );
 
+function run() {
+    ReactDOM.render(
+        <Provider store={store}>
+            <Router history={history}>
+                {routes}
+            </Router>
+        </Provider>
+        ,document.getElementById('app')
+    );
+}
 
-ReactDOM.render(
-    <Provider store={store}>
-        <Router history={history}>
-            {routes}
-        </Router>
-    </Provider>
-    ,document.getElementById('app')
-);
+run();
+store.subscribe(run);

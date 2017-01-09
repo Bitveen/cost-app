@@ -1,11 +1,13 @@
 const defaultState = [
     {
         id: 1,
-        title: 'First list'
+        title: 'First list',
+        totalCost: 0
     },
     {
         id: 2,
-        title: 'Second list'
+        title: 'Second list',
+        totalCost: 0
     }
 ];
 
@@ -17,9 +19,18 @@ export const usersLists = (state = defaultState, action) => {
                 ...state,
                 {
                     id: +new Date,
-                    title: action.data.title
+                    title: action.data.title,
+                    totalCost: 0
                 }
             ];
+        case 'TOTAL_COST_CHANGE':
+            return state.map((list) => {
+                if (list.id == action.data.id) {
+                    list.totalCost = action.data.totalCost;
+                }
+                return list;
+            });
+            break;
         default:
             return state;
     }

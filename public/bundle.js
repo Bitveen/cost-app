@@ -82,7 +82,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(280);
+	__webpack_require__(281);
 
 	var store = (0, _redux.createStore)((0, _redux.combineReducers)({
 	    usersLists: reducers.usersLists,
@@ -92,6 +92,10 @@
 
 	var history = (0, _reactRouterRedux.syncHistoryWithStore)(_reactRouter.browserHistory, store);
 
+	store.subscribe(function () {
+	    console.log(store.getState());
+	});
+
 	var routes = _react2.default.createElement(
 	    _reactRouter.Route,
 	    { path: '/', component: _App2.default },
@@ -99,15 +103,20 @@
 	    _react2.default.createElement(_reactRouter.IndexRoute, { component: _Index2.default })
 	);
 
-	_reactDom2.default.render(_react2.default.createElement(
-	    _reactRedux.Provider,
-	    { store: store },
-	    _react2.default.createElement(
-	        _reactRouter.Router,
-	        { history: history },
-	        routes
-	    )
-	), document.getElementById('app'));
+	function run() {
+	    _reactDom2.default.render(_react2.default.createElement(
+	        _reactRedux.Provider,
+	        { store: store },
+	        _react2.default.createElement(
+	            _reactRouter.Router,
+	            { history: history },
+	            routes
+	        )
+	    ), document.getElementById('app'));
+	}
+
+	run();
+	store.subscribe(run);
 
 /***/ },
 /* 1 */
@@ -28929,10 +28938,12 @@
 
 	var defaultState = [{
 	    id: 1,
-	    title: 'First list'
+	    title: 'First list',
+	    totalCost: 0
 	}, {
 	    id: 2,
-	    title: 'Second list'
+	    title: 'Second list',
+	    totalCost: 0
 	}];
 
 	var usersLists = exports.usersLists = function usersLists() {
@@ -28943,8 +28954,17 @@
 	        case 'ADD_LIST':
 	            return [].concat(_toConsumableArray(state), [{
 	                id: +new Date(),
-	                title: action.data.title
+	                title: action.data.title,
+	                totalCost: 0
 	            }]);
+	        case 'TOTAL_COST_CHANGE':
+	            return state.map(function (list) {
+	                if (list.id == action.data.id) {
+	                    list.totalCost = action.data.totalCost;
+	                }
+	                return list;
+	            });
+	            break;
 	        default:
 	            return state;
 	    }
@@ -29062,6 +29082,14 @@
 	    }
 
 	    _createClass(Sidebar, [{
+	        key: 'componentDidUpdate',
+	        value: function componentDidUpdate() {
+	            var listTitleInput = this.refs.listTitle;
+	            if (listTitleInput) {
+	                this.refs.listTitle.focus();
+	            }
+	        }
+	    }, {
 	        key: 'createList',
 	        value: function createList(e) {
 	            if (e.which !== 13) {
@@ -29166,6 +29194,16 @@
 	    };
 	};
 
+	var totalCostChange = exports.totalCostChange = function totalCostChange(newCost, listId) {
+	    return {
+	        type: 'TOTAL_COST_CHANGE',
+	        data: {
+	            totalCost: newCost,
+	            id: listId
+	        }
+	    };
+	};
+
 /***/ },
 /* 278 */
 /***/ function(module, exports, __webpack_require__) {
@@ -29214,57 +29252,164 @@
 	    value: true
 	});
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
 
 	var _reactRedux = __webpack_require__(199);
 
+	var _actions = __webpack_require__(277);
+
+	var _TopBar = __webpack_require__(280);
+
+	var _TopBar2 = _interopRequireDefault(_TopBar);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var mapStateToProps = function mapStateToProps(state, props) {
-	    var list = state.usersLists.filter(function (list) {
-	        return list.id === parseInt(props.params.listId, 10);
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var mapStateToProps = function mapStateToProps(state, _ref) {
+	    var listId = _ref.params.listId;
+
+	    var currentList = state.usersLists.filter(function (list) {
+	        return list.id === parseInt(listId, 10);
 	    })[0];
 	    return {
-	        list: list
+	        list: currentList
 	    };
 	};
 
-	var ListView = function ListView(props) {
-	    return _react2.default.createElement(
-	        'div',
-	        { className: 'content-container' },
-	        _react2.default.createElement(
-	            'div',
-	            { className: 'content' },
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'ui stacked segment' },
-	                _react2.default.createElement(
-	                    'h1',
-	                    null,
-	                    'List title: ',
-	                    props.list.title
-	                )
-	            )
-	        )
-	    );
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	    return {
+	        onTotalCostChange: function onTotalCostChange(newCost, listId) {
+	            return dispatch((0, _actions.totalCostChange)(newCost, listId));
+	        }
+	    };
 	};
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps)(ListView);
+	var ListView = function (_React$Component) {
+	    _inherits(ListView, _React$Component);
+
+	    function ListView(props) {
+	        _classCallCheck(this, ListView);
+
+	        var _this = _possibleConstructorReturn(this, (ListView.__proto__ || Object.getPrototypeOf(ListView)).call(this, props));
+
+	        _this.handleTotalCostChange = _this.handleTotalCostChange.bind(_this);
+	        return _this;
+	    }
+
+	    _createClass(ListView, [{
+	        key: 'handleTotalCostChange',
+	        value: function handleTotalCostChange(e) {
+	            var val = parseInt(e.target.value, 10);
+	            var listId = parseInt(this.props.params.listId, 10);
+	            if (!isNaN(val)) {
+	                this.props.onTotalCostChange(val, listId);
+	            }
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _props$list = this.props.list,
+	                totalCost = _props$list.totalCost,
+	                title = _props$list.title;
+
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'content-container' },
+	                _react2.default.createElement(_TopBar2.default, { totalCost: totalCost }),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'content' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'ui stacked segment' },
+	                        _react2.default.createElement(
+	                            'h4',
+	                            null,
+	                            '\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u0441\u043F\u0438\u0441\u043A\u0430: ',
+	                            title
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'ui form' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'inline fields' },
+	                                _react2.default.createElement(
+	                                    'div',
+	                                    { className: 'five wide field' },
+	                                    _react2.default.createElement(
+	                                        'label',
+	                                        null,
+	                                        '\u0411\u044E\u0434\u0436\u0435\u0442'
+	                                    ),
+	                                    _react2.default.createElement('input', { type: 'text', placeholder: '\u0411\u044E\u0434\u0436\u0435\u0442...', defaultValue: totalCost, onChange: this.handleTotalCostChange })
+	                                )
+	                            )
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return ListView;
+	}(_react2.default.Component);
+
+	;
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(ListView);
 
 /***/ },
 /* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var TopBar = function TopBar(props) {
+	    return _react2.default.createElement(
+	        "div",
+	        { className: "ui top fixed menu top-bar-menu" },
+	        _react2.default.createElement(
+	            "div",
+	            { className: "item" },
+	            "\u0411\u044E\u0434\u0436\u0435\u0442: 0 / ",
+	            props.totalCost,
+	            " \u0440\u0443\u0431."
+	        )
+	    );
+	};
+	exports.default = TopBar;
+
+/***/ },
+/* 281 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(281);
+	var content = __webpack_require__(282);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(283)(content, {});
+	var update = __webpack_require__(284)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -29281,10 +29426,10 @@
 	}
 
 /***/ },
-/* 281 */
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(282)();
+	exports = module.exports = __webpack_require__(283)();
 	// imports
 
 
@@ -29295,7 +29440,7 @@
 
 
 /***/ },
-/* 282 */
+/* 283 */
 /***/ function(module, exports) {
 
 	/*
@@ -29351,7 +29496,7 @@
 
 
 /***/ },
-/* 283 */
+/* 284 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*

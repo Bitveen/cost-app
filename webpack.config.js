@@ -12,7 +12,8 @@ module.exports = {
             App: 'components/App.jsx',
             Sidebar: 'components/Sidebar.jsx',
             Index: 'components/Index.jsx',
-            ListView: 'components/ListView.jsx'
+            ListView: 'components/ListView.jsx',
+            TopBar: 'components/TopBar.jsx'
         },
         extensions: ['', '.js', '.jsx']
     },
