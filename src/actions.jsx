@@ -27,6 +27,16 @@ export const totalCostChange = (newCost, listId) => {
     };
 };
 
+export const currentCostChange = (currentCost, listId) => {
+    return {
+        type: 'CURRENT_COST_CHANGE',
+        data: {
+            currentCost,
+            listId
+        }
+    };
+};
+
 
 export const addUser = (user, listId) => {
     return {
@@ -35,5 +45,20 @@ export const addUser = (user, listId) => {
             user,
             listId
         }
+    };
+};
+
+
+export const deleteUser = (id) => {
+    return {
+        type: 'DELETE_USER',
+        data: id
+    };
+};
+
+export const updateUser = (user) => {
+    return {
+        type: 'UPDATE_USER',
+        data: user
     };
 };

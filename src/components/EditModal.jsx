@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'Modal';
 import { connect } from 'react-redux';
-
+import { deleteUser, updateUser } from 'actions';
 
 
 const mapStateToProps = (state, { params: { listId, userId } }) => {
@@ -16,4 +16,12 @@ const mapStateToProps = (state, { params: { listId, userId } }) => {
 };
 
 
-export default connect(mapStateToProps)(Modal);
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        deleteUser: id => dispatch(deleteUser(id)),
+        updateUser: user => dispatch(updateUser(user))
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Modal);

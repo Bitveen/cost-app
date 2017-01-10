@@ -28995,6 +28995,8 @@
 	                return list;
 	            });
 	            break;
+	        case 'CURRENT_COST_CHANGE':
+	            return state;
 	        default:
 	            return state;
 	    }
@@ -29015,7 +29017,17 @@
 	                listId: action.data.listId
 	            };
 	            return state.concat([newUser]);
-	            break;
+	        case 'DELETE_USER':
+	            return state.filter(function (user) {
+	                return user.id !== action.data;
+	            });
+	        case 'UPDATE_USER':
+	            return state.map(function (user) {
+	                if (user.id === action.data.id) {
+	                    user = action.data;
+	                }
+	                return user;
+	            });
 	        default:
 	            return state;
 	    }
@@ -29256,6 +29268,16 @@
 	    };
 	};
 
+	var currentCostChange = exports.currentCostChange = function currentCostChange(currentCost, listId) {
+	    return {
+	        type: 'CURRENT_COST_CHANGE',
+	        data: {
+	            currentCost: currentCost,
+	            listId: listId
+	        }
+	    };
+	};
+
 	var addUser = exports.addUser = function addUser(user, listId) {
 	    return {
 	        type: 'ADD_USER',
@@ -29263,6 +29285,20 @@
 	            user: user,
 	            listId: listId
 	        }
+	    };
+	};
+
+	var deleteUser = exports.deleteUser = function deleteUser(id) {
+	    return {
+	        type: 'DELETE_USER',
+	        data: id
+	    };
+	};
+
+	var updateUser = exports.updateUser = function updateUser(user) {
+	    return {
+	        type: 'UPDATE_USER',
+	        data: user
 	    };
 	};
 
@@ -29612,6 +29648,8 @@
 
 	var _reactRedux = __webpack_require__(199);
 
+	var _actions = __webpack_require__(277);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var mapStateToProps = function mapStateToProps(state, _ref) {
@@ -29629,7 +29667,18 @@
 	    };
 	};
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps)(_Modal2.default);
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	    return {
+	        deleteUser: function deleteUser(id) {
+	            return dispatch((0, _actions.deleteUser)(id));
+	        },
+	        updateUser: function updateUser(user) {
+	            return dispatch((0, _actions.updateUser)(user));
+	        }
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Modal2.default);
 
 /***/ },
 /* 283 */
@@ -29673,7 +29722,9 @@
 	        key: 'handleFormSubmit',
 	        value: function handleFormSubmit(e) {
 	            e.preventDefault();
-	            var user = this.props.user;
+	            var _props = this.props,
+	                user = _props.user,
+	                params = _props.params;
 
 
 	            var firstName = this.refs.firstName.value;
@@ -29688,23 +29739,31 @@
 	            }
 
 	            if (user) {
-	                this.props.updateUser();
+	                this.props.updateUser(Object.assign({}, user, {
+	                    firstName: firstName,
+	                    lastName: lastName,
+	                    middleName: middleName,
+	                    cost: cost
+	                }));
 	            } else {
 	                this.props.addUser({
 	                    firstName: firstName,
 	                    lastName: lastName,
 	                    middleName: middleName,
 	                    cost: cost
-	                }, parseInt(this.props.params.listId, 10));
-	                _reactRouter.browserHistory.push('/list/' + this.props.params.listId);
+	                }, parseInt(params.listId, 10));
 	            }
+
+	            _reactRouter.browserHistory.push('/list/' + params.listId);
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var _props = this.props,
-	                user = _props.user,
-	                params = _props.params;
+	            var _this2 = this;
+
+	            var _props2 = this.props,
+	                user = _props2.user,
+	                params = _props2.params;
 
 
 	            return _react2.default.createElement(
@@ -29762,9 +29821,21 @@
 	                            _react2.default.createElement('input', { type: 'text', name: 'cost', ref: 'cost', placeholder: '\u041F\u0440\u0435\u043C\u0438\u044F', defaultValue: user ? user.cost : 0 })
 	                        ),
 	                        user ? _react2.default.createElement(
-	                            'button',
-	                            { className: 'ui button', type: 'submit' },
-	                            '\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C'
+	                            'span',
+	                            null,
+	                            _react2.default.createElement(
+	                                'button',
+	                                { className: 'ui button', type: 'submit' },
+	                                '\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C'
+	                            ),
+	                            _react2.default.createElement(
+	                                'button',
+	                                { className: 'ui button', type: 'button', onClick: function onClick() {
+	                                        _this2.props.deleteUser(user.id);
+	                                        _reactRouter.browserHistory.push('/list/' + params.listId);
+	                                    } },
+	                                '\u0423\u0434\u0430\u043B\u0438\u0442\u044C'
+	                            )
 	                        ) : _react2.default.createElement(
 	                            'button',
 	                            { className: 'ui button', type: 'submit' },

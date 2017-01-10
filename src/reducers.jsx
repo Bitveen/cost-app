@@ -49,6 +49,8 @@ export const usersLists = (state = defaultState, action) => {
                 return list;
             });
             break;
+        case 'CURRENT_COST_CHANGE':
+            return state;
         default:
             return state;
     }
@@ -67,7 +69,15 @@ export const users = (state = defaultStateUsers, action) => {
                 listId: action.data.listId
             };
             return state.concat([newUser]);
-            break;
+        case 'DELETE_USER':
+            return state.filter(user => user.id !== action.data);
+        case 'UPDATE_USER':
+            return state.map((user) => {
+                if (user.id === action.data.id) {
+                    user = action.data;
+                }
+                return user;
+            });
         default:
             return state;
     }

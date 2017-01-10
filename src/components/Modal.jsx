@@ -11,7 +11,7 @@ export default class Modal extends React.Component {
 
     handleFormSubmit(e) {
         e.preventDefault();
-        let { user } = this.props;
+        let { user, params } = this.props;
 
         let firstName = this.refs.firstName.value;
         let lastName = this.refs.lastName.value;
@@ -23,16 +23,22 @@ export default class Modal extends React.Component {
         }
 
         if (user) {
-            this.props.updateUser();
+            this.props.updateUser(Object.assign({}, user, {
+                firstName,
+                lastName,
+                middleName,
+                cost
+            }));
         } else {
             this.props.addUser({
                 firstName,
                 lastName,
                 middleName,
                 cost
-            }, parseInt(this.props.params.listId, 10));
-            browserHistory.push(`/list/${this.props.params.listId}`);
+            }, parseInt(params.listId, 10));
         }
+
+        browserHistory.push(`/list/${params.listId}`);
     }
 
 
@@ -62,7 +68,13 @@ export default class Modal extends React.Component {
                             <input type="text" name="cost" ref="cost" placeholder="Премия" defaultValue={user ? user.cost : 0} />
                         </div>
                         {user ?
-                            (<button className="ui button" type="submit">Сохранить</button>):
+                            (<span>
+                                <button className="ui button" type="submit">Сохранить</button>
+                                <button className="ui button" type="button" onClick={() => {
+                                        this.props.deleteUser(user.id);
+                                        browserHistory.push(`/list/${params.listId}`);
+                                    }}>Удалить</button>
+                            </span>):
                             (<button className="ui button" type="submit">Создать</button>)
                         }
                         <Link className="ui button" to={`/list/${params.listId}`}>Закрыть</Link>
