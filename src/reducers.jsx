@@ -58,7 +58,15 @@ export const usersLists = (state = defaultState, action) => {
 export const users = (state = defaultStateUsers, action) => {
     switch (action.type) {
         case 'ADD_USER':
-            return state;
+            let newUser = {
+                id: +new Date,
+                firstName: action.data.user.firstName,
+                lastName: action.data.user.lastName,
+                middleName: action.data.user.middleName,
+                cost: action.data.user.cost,
+                listId: action.data.listId
+            };
+            return state.concat([newUser]);
             break;
         default:
             return state;

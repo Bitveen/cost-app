@@ -11,6 +11,7 @@ import App from 'App';
 import Index from 'Index';
 import ListView from 'ListView';
 import EditModal from 'EditModal';
+import CreateModal from 'CreateModal';
 
 
 require('style!css!sass!style/app.scss');
@@ -36,6 +37,7 @@ const routes = (
     <Route path='/' component={App}>
         <Route path='/list/:listId' component={ListView}>
             <Route path='/list/:listId/user/:userId/edit' component={EditModal} />
+            <Route path='/list/:listId/user/new' component={CreateModal} />
         </Route>
         <IndexRoute component={Index} />
     </Route>

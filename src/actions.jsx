@@ -26,3 +26,14 @@ export const totalCostChange = (newCost, listId) => {
         }
     };
 };
+
+
+export const addUser = (user, listId) => {
+    return {
+        type: 'ADD_USER',
+        data: {
+            user,
+            listId
+        }
+    };
+};

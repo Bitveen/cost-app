@@ -82,11 +82,15 @@
 
 	var _EditModal2 = _interopRequireDefault(_EditModal);
 
+	var _CreateModal = __webpack_require__(284);
+
+	var _CreateModal2 = _interopRequireDefault(_CreateModal);
+
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(284);
+	__webpack_require__(285);
 
 	var store = (0, _redux.createStore)((0, _redux.combineReducers)({
 	    usersLists: reducers.usersLists,
@@ -107,7 +111,8 @@
 	    _react2.default.createElement(
 	        _reactRouter.Route,
 	        { path: '/list/:listId', component: _ListView2.default },
-	        _react2.default.createElement(_reactRouter.Route, { path: '/list/:listId/user/:userId/edit', component: _EditModal2.default })
+	        _react2.default.createElement(_reactRouter.Route, { path: '/list/:listId/user/:userId/edit', component: _EditModal2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { path: '/list/:listId/user/new', component: _CreateModal2.default })
 	    ),
 	    _react2.default.createElement(_reactRouter.IndexRoute, { component: _Index2.default })
 	);
@@ -29001,7 +29006,15 @@
 
 	    switch (action.type) {
 	        case 'ADD_USER':
-	            return state;
+	            var newUser = {
+	                id: +new Date(),
+	                firstName: action.data.user.firstName,
+	                lastName: action.data.user.lastName,
+	                middleName: action.data.user.middleName,
+	                cost: action.data.user.cost,
+	                listId: action.data.listId
+	            };
+	            return state.concat([newUser]);
 	            break;
 	        default:
 	            return state;
@@ -29130,6 +29143,7 @@
 	    }, {
 	        key: 'createList',
 	        value: function createList(e) {
+
 	            if (e.which !== 13) {
 	                return;
 	            }
@@ -29238,6 +29252,16 @@
 	        data: {
 	            totalCost: newCost,
 	            id: listId
+	        }
+	    };
+	};
+
+	var addUser = exports.addUser = function addUser(user, listId) {
+	    return {
+	        type: 'ADD_USER',
+	        data: {
+	            user: user,
+	            listId: listId
 	        }
 	    };
 	};
@@ -29479,80 +29503,89 @@
 
 
 	    return _react2.default.createElement(
-	        'table',
-	        { className: 'ui celled table' },
+	        'div',
+	        null,
 	        _react2.default.createElement(
-	            'thead',
-	            null,
+	            'table',
+	            { className: 'ui celled table' },
 	            _react2.default.createElement(
-	                'tr',
+	                'thead',
 	                null,
 	                _react2.default.createElement(
-	                    'th',
+	                    'tr',
 	                    null,
-	                    '\u0424\u0430\u043C\u0438\u043B\u0438\u044F'
-	                ),
-	                _react2.default.createElement(
-	                    'th',
-	                    null,
-	                    '\u0418\u043C\u044F'
-	                ),
-	                _react2.default.createElement(
-	                    'th',
-	                    null,
-	                    '\u041E\u0442\u0447\u0435\u0441\u0442\u0432\u043E'
-	                ),
-	                _react2.default.createElement(
-	                    'th',
-	                    null,
-	                    '\u041F\u0440\u0435\u043C\u0438\u044F'
-	                ),
-	                _react2.default.createElement(
-	                    'th',
-	                    null,
-	                    '\u0414\u0435\u0439\u0441\u0442\u0432\u0438\u044F'
+	                    _react2.default.createElement(
+	                        'th',
+	                        null,
+	                        '\u0424\u0430\u043C\u0438\u043B\u0438\u044F'
+	                    ),
+	                    _react2.default.createElement(
+	                        'th',
+	                        null,
+	                        '\u0418\u043C\u044F'
+	                    ),
+	                    _react2.default.createElement(
+	                        'th',
+	                        null,
+	                        '\u041E\u0442\u0447\u0435\u0441\u0442\u0432\u043E'
+	                    ),
+	                    _react2.default.createElement(
+	                        'th',
+	                        null,
+	                        '\u041F\u0440\u0435\u043C\u0438\u044F'
+	                    ),
+	                    _react2.default.createElement(
+	                        'th',
+	                        null,
+	                        '\u0414\u0435\u0439\u0441\u0442\u0432\u0438\u044F'
+	                    )
 	                )
+	            ),
+	            _react2.default.createElement(
+	                'tbody',
+	                null,
+	                users.map(function (user, i) {
+	                    return _react2.default.createElement(
+	                        'tr',
+	                        { key: i },
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            user.lastName
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            user.firstName
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            user.middleName
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            user.cost,
+	                            ' \u0440\u0443\u0431.'
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            { className: 'selectable' },
+	                            _react2.default.createElement(
+	                                _reactRouter.Link,
+	                                { to: '/list/' + listId + '/user/' + user.id + '/edit' },
+	                                '\u0420\u0435\u0434\u0430\u043A\u0442\u0438\u0440\u043E\u0432\u0430\u0442\u044C'
+	                            )
+	                        )
+	                    );
+	                })
 	            )
 	        ),
 	        _react2.default.createElement(
-	            'tbody',
-	            null,
-	            users.map(function (user, i) {
-	                return _react2.default.createElement(
-	                    'tr',
-	                    { key: i },
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        user.lastName
-	                    ),
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        user.firstName
-	                    ),
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        user.middleName
-	                    ),
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        user.cost,
-	                        ' \u0440\u0443\u0431.'
-	                    ),
-	                    _react2.default.createElement(
-	                        'td',
-	                        { className: 'selectable' },
-	                        _react2.default.createElement(
-	                            _reactRouter.Link,
-	                            { to: '/list/' + listId + '/user/' + user.id + '/edit' },
-	                            '\u0420\u0435\u0434\u0430\u043A\u0442\u0438\u0440\u043E\u0432\u0430\u0442\u044C'
-	                        )
-	                    )
-	                );
-	            })
+	            _reactRouter.Link,
+	            { className: 'ui button', to: '/list/' + listId + '/user/new' },
+	            '\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044F'
 	        )
 	    );
 	};
@@ -29581,8 +29614,19 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var mapStateToProps = function mapStateToProps(state) {
-	    return {};
+	var mapStateToProps = function mapStateToProps(state, _ref) {
+	    var _ref$params = _ref.params,
+	        listId = _ref$params.listId,
+	        userId = _ref$params.userId;
+
+	    return {
+	        user: state.users.filter(function (user) {
+	            if (user.listId === parseInt(listId, 10) && user.id === parseInt(userId, 10)) {
+	                return true;
+	            }
+	            return false;
+	        })[0]
+	    };
 	};
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(_Modal2.default);
@@ -29591,7 +29635,164 @@
 /* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(216);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Modal = function (_React$Component) {
+	    _inherits(Modal, _React$Component);
+
+	    function Modal(props) {
+	        _classCallCheck(this, Modal);
+
+	        var _this = _possibleConstructorReturn(this, (Modal.__proto__ || Object.getPrototypeOf(Modal)).call(this, props));
+
+	        _this.handleFormSubmit = _this.handleFormSubmit.bind(_this);
+	        return _this;
+	    }
+
+	    _createClass(Modal, [{
+	        key: 'handleFormSubmit',
+	        value: function handleFormSubmit(e) {
+	            e.preventDefault();
+	            var user = this.props.user;
+
+
+	            var firstName = this.refs.firstName.value;
+	            var lastName = this.refs.lastName.value;
+	            var middleName = this.refs.middleName.value;
+	            var cost = this.refs.cost.value;
+
+	            if (![firstName, lastName, middleName, cost].every(function (item) {
+	                return item;
+	            })) {
+	                return;
+	            }
+
+	            if (user) {
+	                this.props.updateUser();
+	            } else {
+	                this.props.addUser({
+	                    firstName: firstName,
+	                    lastName: lastName,
+	                    middleName: middleName,
+	                    cost: cost
+	                }, parseInt(this.props.params.listId, 10));
+	                _reactRouter.browserHistory.push('/list/' + this.props.params.listId);
+	            }
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _props = this.props,
+	                user = _props.user,
+	                params = _props.params;
+
+
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'my-modal' },
+	                    _react2.default.createElement(
+	                        'h4',
+	                        null,
+	                        user ? 'Редактирование' : 'Новый пользователь'
+	                    ),
+	                    _react2.default.createElement(
+	                        'form',
+	                        { className: 'ui form', onSubmit: this.handleFormSubmit },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'field' },
+	                            _react2.default.createElement(
+	                                'label',
+	                                null,
+	                                '\u0424\u0430\u043C\u0438\u043B\u0438\u044F'
+	                            ),
+	                            _react2.default.createElement('input', { type: 'text', name: 'last-name', ref: 'lastName', placeholder: '\u0424\u0430\u043C\u0438\u043B\u0438\u044F', defaultValue: user ? user.lastName : '' })
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'field' },
+	                            _react2.default.createElement(
+	                                'label',
+	                                null,
+	                                '\u0418\u043C\u044F'
+	                            ),
+	                            _react2.default.createElement('input', { type: 'text', name: 'first-name', ref: 'firstName', placeholder: '\u0418\u043C\u044F', defaultValue: user ? user.firstName : '' })
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'field' },
+	                            _react2.default.createElement(
+	                                'label',
+	                                null,
+	                                '\u041E\u0442\u0447\u0435\u0441\u0442\u0432\u043E'
+	                            ),
+	                            _react2.default.createElement('input', { type: 'text', name: 'middle-name', ref: 'middleName', placeholder: '\u041E\u0442\u0447\u0435\u0441\u0442\u0432\u043E', defaultValue: user ? user.middleName : '' })
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'field' },
+	                            _react2.default.createElement(
+	                                'label',
+	                                null,
+	                                '\u041F\u0440\u0435\u043C\u0438\u044F'
+	                            ),
+	                            _react2.default.createElement('input', { type: 'text', name: 'cost', ref: 'cost', placeholder: '\u041F\u0440\u0435\u043C\u0438\u044F', defaultValue: user ? user.cost : 0 })
+	                        ),
+	                        user ? _react2.default.createElement(
+	                            'button',
+	                            { className: 'ui button', type: 'submit' },
+	                            '\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C'
+	                        ) : _react2.default.createElement(
+	                            'button',
+	                            { className: 'ui button', type: 'submit' },
+	                            '\u0421\u043E\u0437\u0434\u0430\u0442\u044C'
+	                        ),
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { className: 'ui button', to: '/list/' + params.listId },
+	                            '\u0417\u0430\u043A\u0440\u044B\u0442\u044C'
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement('div', { className: 'my-modal-overlay' })
+	            );
+	        }
+	    }]);
+
+	    return Modal;
+	}(_react2.default.Component);
+
+	exports.default = Modal;
+	;
+
+/***/ },
+/* 284 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -29601,48 +29802,37 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _Modal = __webpack_require__(283);
+
+	var _Modal2 = _interopRequireDefault(_Modal);
+
+	var _reactRedux = __webpack_require__(199);
+
+	var _actions = __webpack_require__(277);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var Modal = function Modal() {
-	    return _react2.default.createElement(
-	        "div",
-	        null,
-	        _react2.default.createElement(
-	            "div",
-	            { className: "my-modal" },
-	            _react2.default.createElement(
-	                "h4",
-	                null,
-	                "Modal"
-	            ),
-	            _react2.default.createElement(
-	                "p",
-	                null,
-	                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo officia est voluptatum consequatur adipisci sint. Ea placeat eius, natus aliquid doloribus, deserunt rerum facilis nemo, quo quam, porro sunt ab."
-	            ),
-	            _react2.default.createElement(
-	                "button",
-	                { className: "ui button" },
-	                "\u0417\u0430\u043A\u0440\u044B\u0442\u044C"
-	            )
-	        ),
-	        _react2.default.createElement("div", { className: "my-modal-overlay" })
-	    );
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	    return {
+	        addUser: function addUser(user, listId) {
+	            return dispatch((0, _actions.addUser)(user, listId));
+	        }
+	    };
 	};
 
-	exports.default = Modal;
+	exports.default = (0, _reactRedux.connect)(null, mapDispatchToProps)(_Modal2.default);
 
 /***/ },
-/* 284 */
+/* 285 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(285);
+	var content = __webpack_require__(286);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(287)(content, {});
+	var update = __webpack_require__(288)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -29659,10 +29849,10 @@
 	}
 
 /***/ },
-/* 285 */
+/* 286 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(286)();
+	exports = module.exports = __webpack_require__(287)();
 	// imports
 
 
@@ -29673,7 +29863,7 @@
 
 
 /***/ },
-/* 286 */
+/* 287 */
 /***/ function(module, exports) {
 
 	/*
@@ -29729,7 +29919,7 @@
 
 
 /***/ },
-/* 287 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*

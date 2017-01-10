@@ -39,6 +39,7 @@ class Sidebar extends React.Component {
 
 
     createList(e) {
+    
         if (e.which !== 13) {
             return;
         }

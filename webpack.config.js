@@ -19,7 +19,8 @@ module.exports = {
             TopBar: 'components/TopBar.jsx',
             UsersList: 'components/UsersList.jsx',
             Modal: 'components/Modal.jsx',
-            EditModal: 'components/EditModal.jsx'
+            EditModal: 'components/EditModal.jsx',
+            CreateModal: 'components/CreateModal.jsx'
         },
         extensions: ['', '.js', '.jsx']
     },
