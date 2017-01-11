@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { browserHistory } from 'react-router';
 
 const TopBar = (props) => {
     return (
@@ -9,13 +9,10 @@ const TopBar = (props) => {
             </div>
             <div className="right menu">
                 <div className="item">
-                    <button type="button" className="ui button red">Удалить список</button>
-                </div>
-                <div className="item">
-                    <div className="ui icon input">
-                        <input type="text" placeholder="Фильтр..." />
-                        <i className="search icon" />
-                    </div>
+                    <button type="button" onClick={() => {
+                            props.onRemoveList(props.listId);
+                            browserHistory.push('/');
+                        }} className="ui button red">Удалить список</button>
                 </div>
             </div>
         </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { totalCostChange } from 'actions';
+import { totalCostChange, removeList } from 'actions';
 import TopBar from 'TopBar';
 import UsersList from 'UsersList';
 import CostForm from 'CostForm';
@@ -17,7 +17,8 @@ const mapStateToProps = (state, { params: { listId }}) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onTotalCostChange: (newCost, listId) => dispatch(totalCostChange(newCost, listId))
+        onTotalCostChange: (newCost, listId) => dispatch(totalCostChange(newCost, listId)),
+        removeList: listId => dispatch(removeList(parseInt(listId, 10)))
     };
 };
 
@@ -47,12 +48,12 @@ class ListView extends React.Component {
 
 
     render() {
-        let {users, children, list} = this.props;
+        let {users, children, list, removeList, params} = this.props;
         return (
             <div>
                 {children}
                 <div className="content-container">
-                    <TopBar totalCost={list.totalCost} currentCost={list.currentCost} />
+                    <TopBar listId={params.listId} totalCost={list.totalCost} currentCost={list.currentCost} onRemoveList={removeList} />
                     <div className="content">
                         <div className="ui stacked segment">
                             <h4>Название списка: {list.title}</h4>

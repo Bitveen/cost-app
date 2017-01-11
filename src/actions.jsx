@@ -5,6 +5,16 @@ export const addList = (list) => {
     };
 };
 
+
+export const removeList = (listId) => {
+    return {
+        type: 'REMOVE_LIST',
+        data: {
+            listId
+        }
+    };
+};
+
 export const showAddList = () => {
     return {
         type: 'SHOW_ADD_LIST'

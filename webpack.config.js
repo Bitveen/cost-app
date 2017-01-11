@@ -21,7 +21,8 @@ module.exports = {
             Modal: 'components/Modal.jsx',
             EditModal: 'components/EditModal.jsx',
             CreateModal: 'components/CreateModal.jsx',
-            CostForm: 'components/CostForm.jsx'
+            CostForm: 'components/CostForm.jsx',
+            localStore: 'localStore.jsx'
         },
         extensions: ['', '.js', '.jsx']
     },

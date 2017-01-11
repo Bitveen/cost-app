@@ -62,27 +62,31 @@
 
 	var _reactRouterRedux = __webpack_require__(269);
 
-	var _reducers = __webpack_require__(274);
+	var _localStore = __webpack_require__(274);
+
+	var localStore = _interopRequireWildcard(_localStore);
+
+	var _reducers = __webpack_require__(275);
 
 	var reducers = _interopRequireWildcard(_reducers);
 
-	var _App = __webpack_require__(275);
+	var _App = __webpack_require__(276);
 
 	var _App2 = _interopRequireDefault(_App);
 
-	var _Index = __webpack_require__(278);
+	var _Index = __webpack_require__(279);
 
 	var _Index2 = _interopRequireDefault(_Index);
 
-	var _ListView = __webpack_require__(279);
+	var _ListView = __webpack_require__(280);
 
 	var _ListView2 = _interopRequireDefault(_ListView);
 
-	var _EditModal = __webpack_require__(283);
+	var _EditModal = __webpack_require__(284);
 
 	var _EditModal2 = _interopRequireDefault(_EditModal);
 
-	var _CreateModal = __webpack_require__(285);
+	var _CreateModal = __webpack_require__(286);
 
 	var _CreateModal2 = _interopRequireDefault(_CreateModal);
 
@@ -90,14 +94,18 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(286);
+	__webpack_require__(287);
 
 	var store = (0, _redux.createStore)((0, _redux.combineReducers)({
 	    usersLists: reducers.usersLists,
 	    addingList: reducers.addingList,
 	    users: reducers.users,
 	    routing: _reactRouterRedux.routerReducer
-	}));
+	}), localStore.get());
+
+	store.subscribe(function () {
+	    localStore.set(store.getState());
+	});
 
 	var history = (0, _reactRouterRedux.syncHistoryWithStore)(_reactRouter.browserHistory, store);
 
@@ -28938,42 +28946,31 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	var get = exports.get = function get() {
+	    return JSON.parse(localStorage.getItem('state')) || {};
+	};
+
+	var set = exports.set = function set(data) {
+	    try {
+	        var stringData = JSON.stringify(data);
+	        localStorage.setItem('state', JSON.stringify(data));
+	    } catch (e) {}
+	};
+
+/***/ },
+/* 275 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-	var defaultState = [{
-	    id: 1,
-	    title: 'Премии 2016',
-	    totalCost: 20000,
-	    currentCost: 0
-	}, {
-	    id: 2,
-	    title: 'Премии 2015',
-	    totalCost: 30000,
-	    currentCost: 0
-	}];
-	//
-	// const defaultStateUsers = [
-	//     {
-	//         id: 1,
-	//         firstName: 'Иван',
-	//         lastName: 'Иванов',
-	//         middleName: 'Иванович',
-	//         cost: 0,
-	//         listId: 1
-	//     },
-	//     {
-	//         id: 2,
-	//         firstName: 'Петр',
-	//         lastName: 'Петров',
-	//         middleName: 'Петрович',
-	//         cost: 0,
-	//         listId: 1
-	//     }
-	// ];
-
 	var usersLists = exports.usersLists = function usersLists() {
-	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultState;
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 	    var action = arguments[1];
 
 	    switch (action.type) {
@@ -28984,6 +28981,10 @@
 	                totalCost: 0,
 	                currentCost: 0
 	            }]);
+	        case 'REMOVE_LIST':
+	            return state.filter(function (list) {
+	                return list.id !== action.data.listId;
+	            });
 	        case 'TOTAL_COST_CHANGE':
 	            return state.map(function (list) {
 	                if (list.id == action.data.id) {
@@ -29050,7 +29051,7 @@
 	};
 
 /***/ },
-/* 275 */
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -29063,7 +29064,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Sidebar = __webpack_require__(276);
+	var _Sidebar = __webpack_require__(277);
 
 	var _Sidebar2 = _interopRequireDefault(_Sidebar);
 
@@ -29084,7 +29085,7 @@
 	exports.default = App;
 
 /***/ },
-/* 276 */
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29103,7 +29104,7 @@
 
 	var _reactRouter = __webpack_require__(216);
 
-	var _actions = __webpack_require__(277);
+	var _actions = __webpack_require__(278);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -29233,7 +29234,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Sidebar);
 
 /***/ },
-/* 277 */
+/* 278 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -29245,6 +29246,15 @@
 	    return {
 	        type: 'ADD_LIST',
 	        data: list
+	    };
+	};
+
+	var removeList = exports.removeList = function removeList(listId) {
+	    return {
+	        type: 'REMOVE_LIST',
+	        data: {
+	            listId: listId
+	        }
 	    };
 	};
 
@@ -29315,7 +29325,7 @@
 	};
 
 /***/ },
-/* 278 */
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -29353,7 +29363,7 @@
 	exports.default = Index;
 
 /***/ },
-/* 279 */
+/* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29370,17 +29380,17 @@
 
 	var _reactRedux = __webpack_require__(199);
 
-	var _actions = __webpack_require__(277);
+	var _actions = __webpack_require__(278);
 
-	var _TopBar = __webpack_require__(280);
+	var _TopBar = __webpack_require__(281);
 
 	var _TopBar2 = _interopRequireDefault(_TopBar);
 
-	var _UsersList = __webpack_require__(281);
+	var _UsersList = __webpack_require__(282);
 
 	var _UsersList2 = _interopRequireDefault(_UsersList);
 
-	var _CostForm = __webpack_require__(282);
+	var _CostForm = __webpack_require__(283);
 
 	var _CostForm2 = _interopRequireDefault(_CostForm);
 
@@ -29411,6 +29421,9 @@
 	    return {
 	        onTotalCostChange: function onTotalCostChange(newCost, listId) {
 	            return dispatch((0, _actions.totalCostChange)(newCost, listId));
+	        },
+	        removeList: function removeList(listId) {
+	            return dispatch((0, _actions.removeList)(parseInt(listId, 10)));
 	        }
 	    };
 	};
@@ -29446,7 +29459,9 @@
 	            var _props = this.props,
 	                users = _props.users,
 	                children = _props.children,
-	                list = _props.list;
+	                list = _props.list,
+	                removeList = _props.removeList,
+	                params = _props.params;
 
 	            return _react2.default.createElement(
 	                'div',
@@ -29455,7 +29470,7 @@
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'content-container' },
-	                    _react2.default.createElement(_TopBar2.default, { totalCost: list.totalCost, currentCost: list.currentCost }),
+	                    _react2.default.createElement(_TopBar2.default, { listId: params.listId, totalCost: list.totalCost, currentCost: list.currentCost, onRemoveList: removeList }),
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'content' },
@@ -29485,10 +29500,10 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(ListView);
 
 /***/ },
-/* 280 */
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -29498,41 +29513,36 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRouter = __webpack_require__(216);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var TopBar = function TopBar(props) {
 	    return _react2.default.createElement(
-	        "div",
-	        { className: "ui top fixed menu top-bar-menu" },
+	        'div',
+	        { className: 'ui top fixed menu top-bar-menu' },
 	        _react2.default.createElement(
-	            "div",
-	            { className: "item" },
-	            "\u0411\u044E\u0434\u0436\u0435\u0442: ",
+	            'div',
+	            { className: 'item' },
+	            '\u0411\u044E\u0434\u0436\u0435\u0442: ',
 	            props.currentCost,
-	            " / ",
+	            ' / ',
 	            props.totalCost,
-	            " \u0440\u0443\u0431."
+	            ' \u0440\u0443\u0431.'
 	        ),
 	        _react2.default.createElement(
-	            "div",
-	            { className: "right menu" },
+	            'div',
+	            { className: 'right menu' },
 	            _react2.default.createElement(
-	                "div",
-	                { className: "item" },
+	                'div',
+	                { className: 'item' },
 	                _react2.default.createElement(
-	                    "button",
-	                    { type: "button", className: "ui button red" },
-	                    "\u0423\u0434\u0430\u043B\u0438\u0442\u044C \u0441\u043F\u0438\u0441\u043E\u043A"
-	                )
-	            ),
-	            _react2.default.createElement(
-	                "div",
-	                { className: "item" },
-	                _react2.default.createElement(
-	                    "div",
-	                    { className: "ui icon input" },
-	                    _react2.default.createElement("input", { type: "text", placeholder: "\u0424\u0438\u043B\u044C\u0442\u0440..." }),
-	                    _react2.default.createElement("i", { className: "search icon" })
+	                    'button',
+	                    { type: 'button', onClick: function onClick() {
+	                            props.onRemoveList(props.listId);
+	                            _reactRouter.browserHistory.push('/');
+	                        }, className: 'ui button red' },
+	                    '\u0423\u0434\u0430\u043B\u0438\u0442\u044C \u0441\u043F\u0438\u0441\u043E\u043A'
 	                )
 	            )
 	        )
@@ -29541,7 +29551,7 @@
 	exports.default = TopBar;
 
 /***/ },
-/* 281 */
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29654,7 +29664,7 @@
 	exports.default = UsersList;
 
 /***/ },
-/* 282 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -29726,7 +29736,7 @@
 	exports.default = CostForm;
 
 /***/ },
-/* 283 */
+/* 284 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29739,13 +29749,13 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Modal = __webpack_require__(284);
+	var _Modal = __webpack_require__(285);
 
 	var _Modal2 = _interopRequireDefault(_Modal);
 
 	var _reactRedux = __webpack_require__(199);
 
-	var _actions = __webpack_require__(277);
+	var _actions = __webpack_require__(278);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -29784,7 +29794,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Modal2.default);
 
 /***/ },
-/* 284 */
+/* 285 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29972,7 +29982,7 @@
 	;
 
 /***/ },
-/* 285 */
+/* 286 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29985,13 +29995,13 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Modal = __webpack_require__(284);
+	var _Modal = __webpack_require__(285);
 
 	var _Modal2 = _interopRequireDefault(_Modal);
 
 	var _reactRedux = __webpack_require__(199);
 
-	var _actions = __webpack_require__(277);
+	var _actions = __webpack_require__(278);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -30019,16 +30029,16 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Modal2.default);
 
 /***/ },
-/* 286 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(287);
+	var content = __webpack_require__(288);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(289)(content, {});
+	var update = __webpack_require__(290)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -30045,10 +30055,10 @@
 	}
 
 /***/ },
-/* 287 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(288)();
+	exports = module.exports = __webpack_require__(289)();
 	// imports
 
 
@@ -30059,7 +30069,7 @@
 
 
 /***/ },
-/* 288 */
+/* 289 */
 /***/ function(module, exports) {
 
 	/*
@@ -30115,7 +30125,7 @@
 
 
 /***/ },
-/* 289 */
+/* 290 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*

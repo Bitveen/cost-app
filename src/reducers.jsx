@@ -1,38 +1,4 @@
-const defaultState = [
-    {
-        id: 1,
-        title: 'Премии 2016',
-        totalCost: 20000,
-        currentCost: 0
-    },
-    {
-        id: 2,
-        title: 'Премии 2015',
-        totalCost: 30000,
-        currentCost: 0
-    }
-];
-//
-// const defaultStateUsers = [
-//     {
-//         id: 1,
-//         firstName: 'Иван',
-//         lastName: 'Иванов',
-//         middleName: 'Иванович',
-//         cost: 0,
-//         listId: 1
-//     },
-//     {
-//         id: 2,
-//         firstName: 'Петр',
-//         lastName: 'Петров',
-//         middleName: 'Петрович',
-//         cost: 0,
-//         listId: 1
-//     }
-// ];
-
-export const usersLists = (state = defaultState, action) => {
+export const usersLists = (state = [], action) => {
     switch(action.type) {
         case 'ADD_LIST':
             return [
@@ -44,6 +10,8 @@ export const usersLists = (state = defaultState, action) => {
                     currentCost: 0
                 }
             ];
+        case 'REMOVE_LIST':
+            return state.filter(list => list.id !== action.data.listId);
         case 'TOTAL_COST_CHANGE':
             return state.map((list) => {
                 if (list.id == action.data.id) {

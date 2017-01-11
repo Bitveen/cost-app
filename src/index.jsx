@@ -5,6 +5,8 @@ import { Provider } from 'react-redux';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
 
+import * as localStore from 'localStore';
+
 import * as reducers from 'reducers';
 
 import App from 'App';
@@ -16,14 +18,18 @@ import CreateModal from 'CreateModal';
 
 require('style!css!sass!style/app.scss');
 
-
-
 const store = createStore(combineReducers({
     usersLists: reducers.usersLists,
     addingList: reducers.addingList,
     users: reducers.users,
     routing: routerReducer
-}));
+}), localStore.get());
+
+
+store.subscribe(() => {
+    localStore.set(store.getState());
+});
+
 
 const history = syncHistoryWithStore(browserHistory, store);
 
@@ -38,7 +44,6 @@ const routes = (
         <IndexRoute component={Index} />
     </Route>
 );
-
 
 ReactDOM.render(
         <Provider store={store}>
