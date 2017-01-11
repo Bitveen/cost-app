@@ -20,7 +20,8 @@ module.exports = {
             UsersList: 'components/UsersList.jsx',
             Modal: 'components/Modal.jsx',
             EditModal: 'components/EditModal.jsx',
-            CreateModal: 'components/CreateModal.jsx'
+            CreateModal: 'components/CreateModal.jsx',
+            CostForm: 'components/CostForm.jsx'
         },
         extensions: ['', '.js', '.jsx']
     },

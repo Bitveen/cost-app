@@ -11,14 +11,16 @@ export default class Modal extends React.Component {
 
     handleFormSubmit(e) {
         e.preventDefault();
-        let { user, params } = this.props;
+        let { user, currentCost, params: { listId } } = this.props;
 
         let firstName = this.refs.firstName.value;
         let lastName = this.refs.lastName.value;
         let middleName = this.refs.middleName.value;
-        let cost = this.refs.cost.value;
+        let cost = parseInt(this.refs.cost.value, 10);
 
-        if (![firstName, lastName, middleName, cost].every(item => item)) {
+        listId = parseInt(listId, 10);
+
+        if (![firstName, lastName, middleName].every(item => item)) {
             return;
         }
 
@@ -29,23 +31,27 @@ export default class Modal extends React.Component {
                 middleName,
                 cost
             }));
+            let newCost = (currentCost - user.cost) + cost;
+            this.props.updateCurrentCost(newCost, listId);
         } else {
             this.props.addUser({
                 firstName,
                 lastName,
                 middleName,
                 cost
-            }, parseInt(params.listId, 10));
+            }, listId);
+
+            this.props.updateCurrentCost((currentCost + cost), listId);
         }
 
-        browserHistory.push(`/list/${params.listId}`);
+        browserHistory.push(`/list/${listId}`);
     }
 
 
     render() {
 
-        let { user, params } = this.props;
-
+        let { user, currentCost, params: { listId } } = this.props;
+        listId = parseInt(listId, 10);
         return (
             <div>
                 <div className="my-modal">
@@ -71,13 +77,14 @@ export default class Modal extends React.Component {
                             (<span>
                                 <button className="ui button" type="submit">Сохранить</button>
                                 <button className="ui button" type="button" onClick={() => {
+                                        this.props.updateCurrentCost((currentCost - user.cost), listId);
                                         this.props.deleteUser(user.id);
-                                        browserHistory.push(`/list/${params.listId}`);
+                                        browserHistory.push(`/list/${listId}`);
                                     }}>Удалить</button>
                             </span>):
                             (<button className="ui button" type="submit">Создать</button>)
                         }
-                        <Link className="ui button" to={`/list/${params.listId}`}>Закрыть</Link>
+                        <Link className="ui button" to={`/list/${listId}`}>Закрыть</Link>
                     </form>
                 </div>
 

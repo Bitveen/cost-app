@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'Modal';
 import { connect } from 'react-redux';
-import { deleteUser, updateUser } from 'actions';
+import { deleteUser, updateUser, updateCurrentCost } from 'actions';
 
 
 const mapStateToProps = (state, { params: { listId, userId } }) => {
@@ -11,7 +11,8 @@ const mapStateToProps = (state, { params: { listId, userId } }) => {
                 return true;
             }
             return false;
-        })[0]
+        })[0],
+        currentCost: state.usersLists.filter(list => list.id === parseInt(listId, 10))[0].currentCost
     };
 };
 
@@ -20,7 +21,8 @@ const mapStateToProps = (state, { params: { listId, userId } }) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         deleteUser: id => dispatch(deleteUser(id)),
-        updateUser: user => dispatch(updateUser(user))
+        updateUser: user => dispatch(updateUser(user)),
+        updateCurrentCost: (newCost, listId) => dispatch(updateCurrentCost(newCost, listId))
     };
 };
 

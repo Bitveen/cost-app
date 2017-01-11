@@ -48,7 +48,6 @@ export const addUser = (user, listId) => {
     };
 };
 
-
 export const deleteUser = (id) => {
     return {
         type: 'DELETE_USER',
@@ -60,5 +59,17 @@ export const updateUser = (user) => {
     return {
         type: 'UPDATE_USER',
         data: user
+    };
+};
+
+
+
+export const updateCurrentCost = (cost, listId) => {
+    return {
+        type: 'UPDATE_CURRENT_COST',
+        data: {
+            cost,
+            listId
+        }
     };
 };

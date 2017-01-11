@@ -78,11 +78,11 @@
 
 	var _ListView2 = _interopRequireDefault(_ListView);
 
-	var _EditModal = __webpack_require__(282);
+	var _EditModal = __webpack_require__(283);
 
 	var _EditModal2 = _interopRequireDefault(_EditModal);
 
-	var _CreateModal = __webpack_require__(284);
+	var _CreateModal = __webpack_require__(285);
 
 	var _CreateModal2 = _interopRequireDefault(_CreateModal);
 
@@ -90,7 +90,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(285);
+	__webpack_require__(286);
 
 	var store = (0, _redux.createStore)((0, _redux.combineReducers)({
 	    usersLists: reducers.usersLists,
@@ -100,10 +100,6 @@
 	}));
 
 	var history = (0, _reactRouterRedux.syncHistoryWithStore)(_reactRouter.browserHistory, store);
-
-	store.subscribe(function () {
-	    console.log(store.getState());
-	});
 
 	var routes = _react2.default.createElement(
 	    _reactRouter.Route,
@@ -117,20 +113,15 @@
 	    _react2.default.createElement(_reactRouter.IndexRoute, { component: _Index2.default })
 	);
 
-	function run() {
-	    _reactDom2.default.render(_react2.default.createElement(
-	        _reactRedux.Provider,
-	        { store: store },
-	        _react2.default.createElement(
-	            _reactRouter.Router,
-	            { history: history },
-	            routes
-	        )
-	    ), document.getElementById('app'));
-	}
-
-	run();
-	store.subscribe(run);
+	_reactDom2.default.render(_react2.default.createElement(
+	    _reactRedux.Provider,
+	    { store: store },
+	    _react2.default.createElement(
+	        _reactRouter.Router,
+	        { history: history },
+	        routes
+	    )
+	), document.getElementById('app'));
 
 /***/ },
 /* 1 */
@@ -28953,28 +28944,33 @@
 	var defaultState = [{
 	    id: 1,
 	    title: 'Премии 2016',
-	    totalCost: 0
+	    totalCost: 20000,
+	    currentCost: 0
 	}, {
 	    id: 2,
 	    title: 'Премии 2015',
-	    totalCost: 0
+	    totalCost: 30000,
+	    currentCost: 0
 	}];
-
-	var defaultStateUsers = [{
-	    id: 1,
-	    firstName: 'Иван',
-	    lastName: 'Иванов',
-	    middleName: 'Иванович',
-	    cost: 0,
-	    listId: 1
-	}, {
-	    id: 2,
-	    firstName: 'Петр',
-	    lastName: 'Петров',
-	    middleName: 'Петрович',
-	    cost: 0,
-	    listId: 1
-	}];
+	//
+	// const defaultStateUsers = [
+	//     {
+	//         id: 1,
+	//         firstName: 'Иван',
+	//         lastName: 'Иванов',
+	//         middleName: 'Иванович',
+	//         cost: 0,
+	//         listId: 1
+	//     },
+	//     {
+	//         id: 2,
+	//         firstName: 'Петр',
+	//         lastName: 'Петров',
+	//         middleName: 'Петрович',
+	//         cost: 0,
+	//         listId: 1
+	//     }
+	// ];
 
 	var usersLists = exports.usersLists = function usersLists() {
 	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultState;
@@ -28985,7 +28981,8 @@
 	            return [].concat(_toConsumableArray(state), [{
 	                id: +new Date(),
 	                title: action.data.title,
-	                totalCost: 0
+	                totalCost: 0,
+	                currentCost: 0
 	            }]);
 	        case 'TOTAL_COST_CHANGE':
 	            return state.map(function (list) {
@@ -28995,15 +28992,20 @@
 	                return list;
 	            });
 	            break;
-	        case 'CURRENT_COST_CHANGE':
-	            return state;
+	        case 'UPDATE_CURRENT_COST':
+	            return state.map(function (list) {
+	                if (list.id === action.data.listId) {
+	                    list.currentCost = parseInt(action.data.cost, 10);
+	                }
+	                return list;
+	            });
 	        default:
 	            return state;
 	    }
 	};
 
 	var users = exports.users = function users() {
-	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultStateUsers;
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 	    var action = arguments[1];
 
 	    switch (action.type) {
@@ -29302,6 +29304,16 @@
 	    };
 	};
 
+	var updateCurrentCost = exports.updateCurrentCost = function updateCurrentCost(cost, listId) {
+	    return {
+	        type: 'UPDATE_CURRENT_COST',
+	        data: {
+	            cost: cost,
+	            listId: listId
+	        }
+	    };
+	};
+
 /***/ },
 /* 278 */
 /***/ function(module, exports, __webpack_require__) {
@@ -29368,6 +29380,10 @@
 
 	var _UsersList2 = _interopRequireDefault(_UsersList);
 
+	var _CostForm = __webpack_require__(282);
+
+	var _CostForm2 = _interopRequireDefault(_CostForm);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -29413,23 +29429,24 @@
 
 	    _createClass(ListView, [{
 	        key: 'handleTotalCostChange',
-	        value: function handleTotalCostChange(e) {
-	            var val = parseInt(e.target.value, 10);
+	        value: function handleTotalCostChange(newCost) {
 	            var listId = parseInt(this.props.params.listId, 10);
-	            if (!isNaN(val)) {
-	                this.props.onTotalCostChange(val, listId);
+
+	            if (!newCost) {
+	                newCost = 0;
+	            }
+
+	            if (!isNaN(newCost)) {
+	                this.props.onTotalCostChange(parseInt(newCost, 10), listId);
 	            }
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var _props$list = this.props.list,
-	                totalCost = _props$list.totalCost,
-	                title = _props$list.title,
-	                id = _props$list.id;
 	            var _props = this.props,
 	                users = _props.users,
-	                children = _props.children;
+	                children = _props.children,
+	                list = _props.list;
 
 	            return _react2.default.createElement(
 	                'div',
@@ -29438,7 +29455,7 @@
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'content-container' },
-	                    _react2.default.createElement(_TopBar2.default, { totalCost: totalCost }),
+	                    _react2.default.createElement(_TopBar2.default, { totalCost: list.totalCost, currentCost: list.currentCost }),
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'content' },
@@ -29449,27 +29466,10 @@
 	                                'h4',
 	                                null,
 	                                '\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u0441\u043F\u0438\u0441\u043A\u0430: ',
-	                                title
+	                                list.title
 	                            ),
-	                            _react2.default.createElement(
-	                                'div',
-	                                { className: 'ui form' },
-	                                _react2.default.createElement(
-	                                    'div',
-	                                    { className: 'inline fields' },
-	                                    _react2.default.createElement(
-	                                        'div',
-	                                        { className: 'five wide field' },
-	                                        _react2.default.createElement(
-	                                            'label',
-	                                            null,
-	                                            '\u0411\u044E\u0434\u0436\u0435\u0442'
-	                                        ),
-	                                        _react2.default.createElement('input', { type: 'text', placeholder: '\u0411\u044E\u0434\u0436\u0435\u0442...', defaultValue: totalCost, onChange: this.handleTotalCostChange })
-	                                    )
-	                                )
-	                            ),
-	                            _react2.default.createElement(_UsersList2.default, { users: users, listId: id })
+	                            _react2.default.createElement(_CostForm2.default, { totalCost: list.totalCost, onHandleChange: this.handleTotalCostChange }),
+	                            _react2.default.createElement(_UsersList2.default, { users: users, listId: list.id })
 	                        )
 	                    )
 	                )
@@ -29507,9 +29507,34 @@
 	        _react2.default.createElement(
 	            "div",
 	            { className: "item" },
-	            "\u0411\u044E\u0434\u0436\u0435\u0442: 0 / ",
+	            "\u0411\u044E\u0434\u0436\u0435\u0442: ",
+	            props.currentCost,
+	            " / ",
 	            props.totalCost,
 	            " \u0440\u0443\u0431."
+	        ),
+	        _react2.default.createElement(
+	            "div",
+	            { className: "right menu" },
+	            _react2.default.createElement(
+	                "div",
+	                { className: "item" },
+	                _react2.default.createElement(
+	                    "button",
+	                    { type: "button", className: "ui button red" },
+	                    "\u0423\u0434\u0430\u043B\u0438\u0442\u044C \u0441\u043F\u0438\u0441\u043E\u043A"
+	                )
+	            ),
+	            _react2.default.createElement(
+	                "div",
+	                { className: "item" },
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "ui icon input" },
+	                    _react2.default.createElement("input", { type: "text", placeholder: "\u0424\u0438\u043B\u044C\u0442\u0440..." }),
+	                    _react2.default.createElement("i", { className: "search icon" })
+	                )
+	            )
 	        )
 	    );
 	};
@@ -29632,6 +29657,78 @@
 /* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var CostForm = function (_React$Component) {
+	    _inherits(CostForm, _React$Component);
+
+	    function CostForm(props) {
+	        _classCallCheck(this, CostForm);
+
+	        var _this = _possibleConstructorReturn(this, (CostForm.__proto__ || Object.getPrototypeOf(CostForm)).call(this, props));
+
+	        _this.handleChange = _this.handleChange.bind(_this);
+	        return _this;
+	    }
+
+	    _createClass(CostForm, [{
+	        key: "handleChange",
+	        value: function handleChange(e) {
+	            this.props.onHandleChange(this.refs.totalCost.value);
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            var totalCost = this.props.totalCost;
+
+	            return _react2.default.createElement(
+	                "div",
+	                { className: "ui form" },
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "inline fields" },
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "five wide field" },
+	                        _react2.default.createElement(
+	                            "label",
+	                            null,
+	                            "\u0411\u044E\u0434\u0436\u0435\u0442"
+	                        ),
+	                        _react2.default.createElement("input", { type: "text", placeholder: "\u0411\u044E\u0434\u0436\u0435\u0442...", ref: "totalCost", value: totalCost, onChange: this.handleChange })
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return CostForm;
+	}(_react2.default.Component);
+
+	exports.default = CostForm;
+
+/***/ },
+/* 283 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -29642,7 +29739,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Modal = __webpack_require__(283);
+	var _Modal = __webpack_require__(284);
 
 	var _Modal2 = _interopRequireDefault(_Modal);
 
@@ -29663,7 +29760,10 @@
 	                return true;
 	            }
 	            return false;
-	        })[0]
+	        })[0],
+	        currentCost: state.usersLists.filter(function (list) {
+	            return list.id === parseInt(listId, 10);
+	        })[0].currentCost
 	    };
 	};
 
@@ -29674,6 +29774,9 @@
 	        },
 	        updateUser: function updateUser(user) {
 	            return dispatch((0, _actions.updateUser)(user));
+	        },
+	        updateCurrentCost: function updateCurrentCost(newCost, listId) {
+	            return dispatch((0, _actions.updateCurrentCost)(newCost, listId));
 	        }
 	    };
 	};
@@ -29681,7 +29784,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Modal2.default);
 
 /***/ },
-/* 283 */
+/* 284 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29724,15 +29827,18 @@
 	            e.preventDefault();
 	            var _props = this.props,
 	                user = _props.user,
-	                params = _props.params;
+	                currentCost = _props.currentCost,
+	                listId = _props.params.listId;
 
 
 	            var firstName = this.refs.firstName.value;
 	            var lastName = this.refs.lastName.value;
 	            var middleName = this.refs.middleName.value;
-	            var cost = this.refs.cost.value;
+	            var cost = parseInt(this.refs.cost.value, 10);
 
-	            if (![firstName, lastName, middleName, cost].every(function (item) {
+	            listId = parseInt(listId, 10);
+
+	            if (![firstName, lastName, middleName].every(function (item) {
 	                return item;
 	            })) {
 	                return;
@@ -29745,16 +29851,20 @@
 	                    middleName: middleName,
 	                    cost: cost
 	                }));
+	                var newCost = currentCost - user.cost + cost;
+	                this.props.updateCurrentCost(newCost, listId);
 	            } else {
 	                this.props.addUser({
 	                    firstName: firstName,
 	                    lastName: lastName,
 	                    middleName: middleName,
 	                    cost: cost
-	                }, parseInt(params.listId, 10));
+	                }, listId);
+
+	                this.props.updateCurrentCost(currentCost + cost, listId);
 	            }
 
-	            _reactRouter.browserHistory.push('/list/' + params.listId);
+	            _reactRouter.browserHistory.push('/list/' + listId);
 	        }
 	    }, {
 	        key: 'render',
@@ -29763,9 +29873,10 @@
 
 	            var _props2 = this.props,
 	                user = _props2.user,
-	                params = _props2.params;
+	                currentCost = _props2.currentCost,
+	                listId = _props2.params.listId;
 
-
+	            listId = parseInt(listId, 10);
 	            return _react2.default.createElement(
 	                'div',
 	                null,
@@ -29831,8 +29942,9 @@
 	                            _react2.default.createElement(
 	                                'button',
 	                                { className: 'ui button', type: 'button', onClick: function onClick() {
+	                                        _this2.props.updateCurrentCost(currentCost - user.cost, listId);
 	                                        _this2.props.deleteUser(user.id);
-	                                        _reactRouter.browserHistory.push('/list/' + params.listId);
+	                                        _reactRouter.browserHistory.push('/list/' + listId);
 	                                    } },
 	                                '\u0423\u0434\u0430\u043B\u0438\u0442\u044C'
 	                            )
@@ -29843,7 +29955,7 @@
 	                        ),
 	                        _react2.default.createElement(
 	                            _reactRouter.Link,
-	                            { className: 'ui button', to: '/list/' + params.listId },
+	                            { className: 'ui button', to: '/list/' + listId },
 	                            '\u0417\u0430\u043A\u0440\u044B\u0442\u044C'
 	                        )
 	                    )
@@ -29860,7 +29972,7 @@
 	;
 
 /***/ },
-/* 284 */
+/* 285 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29873,7 +29985,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Modal = __webpack_require__(283);
+	var _Modal = __webpack_require__(284);
 
 	var _Modal2 = _interopRequireDefault(_Modal);
 
@@ -29887,23 +29999,36 @@
 	    return {
 	        addUser: function addUser(user, listId) {
 	            return dispatch((0, _actions.addUser)(user, listId));
+	        },
+	        updateCurrentCost: function updateCurrentCost(newCost, listId) {
+	            return dispatch((0, _actions.updateCurrentCost)(newCost, listId));
 	        }
 	    };
 	};
 
-	exports.default = (0, _reactRedux.connect)(null, mapDispatchToProps)(_Modal2.default);
+	var mapStateToProps = function mapStateToProps(state, _ref) {
+	    var listId = _ref.params.listId;
+
+	    return {
+	        currentCost: state.usersLists.filter(function (list) {
+	            return list.id === parseInt(listId, 10);
+	        })[0].currentCost
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Modal2.default);
 
 /***/ },
-/* 285 */
+/* 286 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(286);
+	var content = __webpack_require__(287);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(288)(content, {});
+	var update = __webpack_require__(289)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -29920,10 +30045,10 @@
 	}
 
 /***/ },
-/* 286 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(287)();
+	exports = module.exports = __webpack_require__(288)();
 	// imports
 
 
@@ -29934,7 +30059,7 @@
 
 
 /***/ },
-/* 287 */
+/* 288 */
 /***/ function(module, exports) {
 
 	/*
@@ -29990,7 +30115,7 @@
 
 
 /***/ },
-/* 288 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*

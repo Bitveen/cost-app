@@ -39,7 +39,7 @@ class Sidebar extends React.Component {
 
 
     createList(e) {
-    
+
         if (e.which !== 13) {
             return;
         }
@@ -81,7 +81,7 @@ class Sidebar extends React.Component {
                     addingList && (
                         <div className="item">
                             <div className="ui input">
-                                <input type="text" placeholder="Название списка..." onKeyPress={this.createList} ref="listTitle"/>
+                                <input type="text" placeholder="Название списка..." onKeyPress={this.createList} ref="listTitle" />
                             </div>
                         </div>
                     )}

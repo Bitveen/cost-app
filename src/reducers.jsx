@@ -2,33 +2,35 @@ const defaultState = [
     {
         id: 1,
         title: 'Премии 2016',
-        totalCost: 0
+        totalCost: 20000,
+        currentCost: 0
     },
     {
         id: 2,
         title: 'Премии 2015',
-        totalCost: 0
+        totalCost: 30000,
+        currentCost: 0
     }
 ];
-
-const defaultStateUsers = [
-    {
-        id: 1,
-        firstName: 'Иван',
-        lastName: 'Иванов',
-        middleName: 'Иванович',
-        cost: 0,
-        listId: 1
-    },
-    {
-        id: 2,
-        firstName: 'Петр',
-        lastName: 'Петров',
-        middleName: 'Петрович',
-        cost: 0,
-        listId: 1
-    }
-];
+//
+// const defaultStateUsers = [
+//     {
+//         id: 1,
+//         firstName: 'Иван',
+//         lastName: 'Иванов',
+//         middleName: 'Иванович',
+//         cost: 0,
+//         listId: 1
+//     },
+//     {
+//         id: 2,
+//         firstName: 'Петр',
+//         lastName: 'Петров',
+//         middleName: 'Петрович',
+//         cost: 0,
+//         listId: 1
+//     }
+// ];
 
 export const usersLists = (state = defaultState, action) => {
     switch(action.type) {
@@ -38,7 +40,8 @@ export const usersLists = (state = defaultState, action) => {
                 {
                     id: +new Date,
                     title: action.data.title,
-                    totalCost: 0
+                    totalCost: 0,
+                    currentCost: 0
                 }
             ];
         case 'TOTAL_COST_CHANGE':
@@ -49,15 +52,20 @@ export const usersLists = (state = defaultState, action) => {
                 return list;
             });
             break;
-        case 'CURRENT_COST_CHANGE':
-            return state;
+        case 'UPDATE_CURRENT_COST':
+            return state.map((list) => {
+                if (list.id === action.data.listId) {
+                    list.currentCost = parseInt(action.data.cost, 10);
+                }
+                return list;
+            });
         default:
             return state;
     }
 };
 
 
-export const users = (state = defaultStateUsers, action) => {
+export const users = (state = [], action) => {
     switch (action.type) {
         case 'ADD_USER':
             let newUser = {
